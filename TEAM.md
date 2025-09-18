@@ -1,7 +1,5 @@
 Hi This is Ming Leong Tsui Lucas.
-
-HI This is Xinyu Wang (Iris)
-
-Hi this is Xinwen Fang (Sean)
-
+Hi This is Xinyu Wang (Iris)
+Hi This is Sujan/SJ.
+Hi This is Xinwen Fang(sean)
 Hi this is Zihan Wang.
