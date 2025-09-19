@@ -1,0 +1,8 @@
+  NAME		 	 VALUE
+
+DB_SERVER	=	sqlserver.example.com
+DB_PORT		=	1433
+DB_NAME		=	AssetInsights
+DB_USER		=	svc_app
+DB_PASS		=	supersecretpassword
+DB_DRIVER	=	ODBC Driver 17 for SQL Server

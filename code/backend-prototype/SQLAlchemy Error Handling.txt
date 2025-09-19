@@ -1,0 +1,22 @@
+#If there are any error in the data entry or the data processing, the SQLAlchemy Error Handling method will take care of it.
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from config import SQLALCHEMY_DATABASE_URI
+
+engine = create_engine(SQLALCHEMY_DATABASE_URI, pool_size=10, max_overflow=20, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine)
+
+def insert_fee_record(asset_id, reporting_date, fee_pct, fee_amount):
+    session = SessionLocal()
+    try:
+        fr = FeeRecord(AssetID=asset_id, ReportingDate=reporting_date, FeePct=fee_pct, FeeAmount=fee_amount)
+        session.add(fr)
+        session.commit()
+        return fr.FeeRecordID
+    except Exception as e:
+        session.rollback()
+        # log exception
+        raise
+    finally:
+        session.close()

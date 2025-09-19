@@ -1,0 +1,34 @@
+#"pyodbc" helps in connecting Python with the ODBC (Open Database Connectivity), which in-turn helps python to interact with other DBMSs (Database Management Systems).
+
+import pyodbc
+import os
+
+conn_str = (
+    "DRIVER={ODBC Driver 17 for SQL Server};"
+    f"SERVER={os.environ['DB_SERVER']},{os.environ.get('DB_PORT',1433)};"
+    f"DATABASE={os.environ['DB_NAME']};UID={os.environ['DB_USER']};PWD={os.environ['DB_PASS']};"
+    "Encrypt=yes;TrustServerCertificate=yes;"
+)
+conn = pyodbc.connect(conn_str)
+cursor = conn.cursor()
+cursor.fast_executemany = True
+
+rows = [
+    (asset_id, '2025-01-01', 0.0125, 1250.00),
+    (asset_id2, '2025-01-01', 0.010, 1000.00),
+    # ...
+]
+
+try:
+    cursor.executemany(
+      "INSERT INTO dbo.FeeRecords (AssetID, ReportingDate, FeePct, FeeAmount, IngestID) VALUES (?, ?, ?, ?, ?)",
+      rows
+    )
+    conn.commit()
+except Exception as e:
+    conn.rollback()
+    # log
+    raise
+finally:
+    cursor.close()
+    conn.close()

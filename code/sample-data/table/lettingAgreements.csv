@@ -1,0 +1,60 @@
+﻿tenancy_id,property_id,property_alias,tenant_name,rent,start_date,end_date,tel,email,agent
+1,12,Arden,Joseph Adeolu Epemolu,375,12/14/2020,8/30/2021,,,Purplebricks
+2,1,Bedford,Linda Revel,475,12/18/2018,,,,TM
+3,17,Bryce,Heather Blackburn,500,12/1/2020,,,,Purplebricks
+4,8,Clyde St,Farshad Quadhafi Allauddin,650,3/19/2021,5/3/2022,,,Purplebricks
+5,10,Cuthill,Norman Gregg,725,4/12/2021,,,,TM
+6,15,Dempster,Rouzbeh Jassery,400,4/7/2020,9/4/2022,,,Purplebricks
+7,5,Denholm,,475,12/15/2020,4/10/2025,,,TM
+8,20,Dumbarton,Kirsty Blyth Macleod,375,12/18/2020,6/5/2021,,,Purplebricks
+9,14,George,Jordan McLatchie,375,5/9/2020,11/13/2021,,,Purplebricks
+10,3,Houldsworth,,350,6/19/2020,,,,TM
+11,11,Kelly St,Colin Marshall,350,4/30/2021,,,,Purplebricks
+12,24,Kerr,Sylwia Tomaszewska,375,1/30/2021,,,,MHK
+13,6,Kildonan,Installfast UK Ltd,525,9/1/2021,11/20/2020,,,TM
+14,23,Main St,Elizabeth Harvey,375,10/15/2020,1/25/2021,,,TM
+15,23,Main St,Ian Guilfoyle,375,4/14/2021,8/13/2021,,,TM
+16,16,Mason,Robert Glover,450,11/4/2020,,,,Purplebricks
+17,9,Portal,Mary Burgess,450,9/4/2020,,,,TM
+18,22,Prospecthill,Christopher Piggott,350,3/13/2021,10/12/2021,,,Purplebricks
+19,13,Rannoch,Anna Zofia Dzieglewicz,475,11/19/2020,1/4/2024,,,Purplebricks
+20,7,Springwell,Matthew Heads,450,12/1/2020,5/19/2022,,,TM
+21,4,Westmuir,Regina Gudyniene,500,8/1/2020,7/6/2021,,,TM
+22,21,Winning,McConnell Gage,475,10/17/2020,6/14/2021,,,Purplebricks
+23,6,Kildonan,Alistair Emery,525,11/20/2020,11/3/2021,,,TM
+24,2,John Knox,Craig Speirs,525,5/21/2021,6/29/2022,,,TM
+25,20,Dumbarton,Scott Douglas Apps,400,6/14/2021,3/14/2024,4.47595E+11,,
+,scottdapps@hotmail.co.uk,,,,,,,,
+,Purplebricks,,,,,,,,
+26,21,Winning,Thet Tun,475,7/24/2021,10/22/2022,7833383394,thet.tunann@live.com,Purplebricks
+27,26,Macadam,Martin Vychodil,450,8/10/2021,2/19/2024,7572731350,vychodil90@gmail.com,TM
+28,12,Arden,Ana Shuttleworth,375,9/6/2021,10/27/2023,,,Purplebricks
+31,25,99 Arden,Viniya Varghese,395,9/28/2021,11/11/2022,viniyavarghese1114@gmail.com,7917492644,MHK
+35,4,Westmuir,Rhiannon Agnew,650,9/22/2021,,7599345983,rhiannonagnew@outlook.com,TM
+37,6,Kildonan,Robert Fisher,525,10/4/2021,7/3/2023,7376195862,robertfisher09@hotmail.co.uk,TM
+42,27,97B Dempster,Ian Hopkin,350,5/1/2022,7/15/2022,7951716138,lorrainemny78@gmail.com ,Jewel Homes
+44,2,John Knox,Jane Martin,595,5/26/2022,6/29/2022,7722240864,janemartin282@gmail.co,TM
+45,7,Springwell,Jason Angus Cooper,475,6/23/2022,4/8/2024,7446298349,quarg@btinternet.com ,TM
+47,2,John Knox,Olawale olaniyan,595,7/4/2022,,7448547740,olawale_olaniyan@gmail.com,TM
+48,15,Dempster,Muhammad Numan,400,9/5/2022,11/4/2024,7361801322,numan79680@gmail.com,MHK
+49,29,Pine Crescent,Ridh Bennai,495,8/17/2022,,,victoruklala@gmail.com ,TM
+50,8,Clyde St,Yunik Bajoria,750,8/18/2022,6/9/2023,7776838571,bajoria.unique@gmail.com,TM
+52,27,97B Dempster,Innes Donn,350,9/1/2022,4/26/2024,7751130032,innesdonn@gmail.com,Jewel Homes
+53,25,99 Arden,Peculiar Chidera Raymond,425,12/22/2022,5/2/2024,7766042925,tise.bim@outlook.com,MHK
+56,28,Lintmill,Euan McCulloch,450,12/6/2022,4/19/2024,7936905512,euanc68outlook.com,TM
+59,21,Winning,Oluwakemisola Elizabeth,475,2/16/2023,3/31/2024,7760865359,abeekemisola@gmail.com ,Jewel Homes
+60,30,Arranview,Jake Steele,525,12/15/2022,,, j.steele.b.93@gmail.com,TM
+1061,8,Clyde St,Tom Angus Lawrie,995,7/19/2023,1/17/2024,7340569334,tlawrie52@gmail.com,TM
+1062,6,Kildonan,Angela Chidinma Anyanwu,750,10/18/2023,,7780049340,angelachidinma1979@gmail.com,
+1063,12,Arden,Okikijesu Adebiyi,530,11/30/2023,,4.47824E+11,okikijesuadebiyi@gmail.com,DJ Alexander
+2065,13,Rannoch,s Latoya Andrea Stewart-Ashley,650,1/5/2024,5/31/2024,4.47535E+11,latoyastewart450@gmail.com,DJ Alexander
+3064,27,97B Dempster,Finan Kennedy,425,4/26/2024,,7470654169,finankennedy22@gmail.com,Jewel Homes
+3065,8,Clyde St,Kately Gilmour,850,5/13/2024,8/19/2025,7860124948,katelycgilmour@gmail.com,TM
+3068,13,Rannoch,Nikki Denise Todd of,,,,,,
+,895,6/13/2024,,7506481413,nikkitodd@visitingangelz.co.uk,DJ Alexander,,,
+3069,28,Lintmill,James Gordon Dykes,495,8/5/2024,,7890209243,dgordonrfc@gmail.com,TM
+3070,26,Macadam, Matthew John Bunten,525,7/17/2024,,7751491952,bunten78@gmail.com,TM
+3072,13,Rannoch,Ronke Funmilayo Odedeji ,840,8/9/2024,,7311403016,ronkeodedeji@gmail.com,DJ Alexander
+3073,20,Dumbarton,Katherine Lowther,600,1/8/2025,,7788913399,katherine.e.lowther@gmail.com,DJ Alexander
+4073,15,Dempster,Ray Hunter,550,4/12/2025,,7596482971,rdhcobra@googlemail.com,MHK
+4075,5,Denholm,Babatunde Adeleke,625,8/12/2025,,7445125704,adelekebabs07@gmail.com,TM
