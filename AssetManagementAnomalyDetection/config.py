@@ -31,7 +31,9 @@ class ProductionConfig(Config):
     
     # Production-specific settings
     if not SQLALCHEMY_DATABASE_URI:
-        raise ValueError("DATABASE_URL environment variable must be set in production")
+        # Fallback to SQLite if no DATABASE_URL is provided
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///instance/asset_management.db'
+        print("WARNING: No DATABASE_URL provided, falling back to SQLite")
 
 class TestingConfig(Config):
     """Testing configuration using in-memory SQLite."""
@@ -49,4 +51,8 @@ config = {
 def get_config():
     """Get configuration based on environment."""
     env = os.environ.get('FLASK_ENV', 'development')
-    return config.get(env, config['default'])
+    print(f"Environment: {env}")
+    print(f"DATABASE_URL: {os.environ.get('DATABASE_URL', 'Not set')}")
+    config_class = config.get(env, config['default'])
+    print(f"Using config: {config_class.__name__}")
+    return config_class
