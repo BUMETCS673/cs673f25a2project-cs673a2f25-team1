@@ -51,8 +51,10 @@ config = {
 def get_config():
     """Get configuration based on environment."""
     env = os.environ.get('FLASK_ENV', 'development')
+    database_url = os.environ.get('DATABASE_URL', 'Not set')
     print(f"Environment: {env}")
-    print(f"DATABASE_URL: {os.environ.get('DATABASE_URL', 'Not set')}")
+    print(f"DATABASE_URL: {database_url}")
+    print(f"All environment variables containing 'DATABASE': {[k for k in os.environ.keys() if 'DATABASE' in k.upper()]}")
     config_class = config.get(env, config['default'])
     print(f"Using config: {config_class.__name__}")
     return config_class
