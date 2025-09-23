@@ -16,6 +16,15 @@ def init_database():
         print("Creating database tables...")
         db.create_all()
         
+        # Ensure the database file exists
+        import sqlite3
+        db_path = '/tmp/asset_management.db'
+        if not os.path.exists(db_path):
+            # Create the database file
+            conn = sqlite3.connect(db_path)
+            conn.close()
+            print(f"Created database file at {db_path}")
+        
         # Check if data already exists
         if Portfolio.query.first():
             print("Database already has data, skipping sample data creation.")

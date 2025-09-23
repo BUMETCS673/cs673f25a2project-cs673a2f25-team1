@@ -22,7 +22,7 @@ class Config:
 class DevelopmentConfig(Config):
     """Development configuration using SQLite."""
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///instance/asset_management.db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///tmp/asset_management.db'
 
 class ProductionConfig(Config):
     """Production configuration using PostgreSQL."""
@@ -32,7 +32,7 @@ class ProductionConfig(Config):
     # Production-specific settings
     if not SQLALCHEMY_DATABASE_URI:
         # Fallback to SQLite if no DATABASE_URL is provided
-        SQLALCHEMY_DATABASE_URI = 'sqlite:///instance/asset_management.db'
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///tmp/asset_management.db'
         print("WARNING: No DATABASE_URL provided, falling back to SQLite")
 
 class TestingConfig(Config):
