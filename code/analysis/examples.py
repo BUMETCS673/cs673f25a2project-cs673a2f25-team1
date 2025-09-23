@@ -7,7 +7,12 @@ Demonstrates how to use the analysis functions for different business scenarios.
 import json
 import sys
 import os
-sys.path.append('analysis')
+
+# Ensure local imports work regardless of CWD
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+if CURRENT_DIR not in sys.path:
+    sys.path.insert(0, CURRENT_DIR)
+
 from business_analyzer import RentalPropertyAnalyzer
 
 
@@ -22,7 +27,7 @@ def example_basic_analysis():
     
     if results:
         analyzer.print_summary()
-        print("\n✓ Analysis complete! Results saved to analysis/business_analysis_results.json")
+        print("\n✓ Analysis complete! Results saved next to this script (business_analysis_results.json)")
     else:
         print("✗ Analysis failed")
 
@@ -194,7 +199,7 @@ def example_custom_analysis():
     
     # Load existing results
     try:
-        with open('analysis/business_analysis_results.json', 'r') as f:
+        with open(os.path.join(CURRENT_DIR, 'business_analysis_results.json'), 'r') as f:
             results = json.load(f)
         
         print("Custom Analysis: Top Performing Properties")

@@ -362,12 +362,17 @@ class RentalPropertyAnalyzer:
         print("Analysis complete!")
         return self.results
     
-    def save_results(self, output_path: str = "analysis/business_analysis_results.json"):
+    def save_results(self, output_path: str = None):
         """Save analysis results to JSON file."""
         if not self.results:
             print("No results to save. Run analysis first.")
             return
         
+        # Default to saving alongside this script if no path provided
+        if output_path is None:
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            output_path = os.path.join(script_dir, 'business_analysis_results.json')
+
         # Ensure directory exists
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         
