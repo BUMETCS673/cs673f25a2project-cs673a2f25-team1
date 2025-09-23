@@ -1,0 +1,13 @@
+Copyright © 2025 [Xinwen Fang, Ming Leong "Lucas" Tsui, Xinyu Wang, Zihan W].
+All Rights Reserved.
+
+This repository is a joint work authored by the above contributors
+as part of [CS 673 Software Engineering], [Boston University].
+
+Permission is granted to view this repository. 
+No permission is granted to copy, modify, merge, publish, distribute,
+sublicense, or sell copies of the software or documentation,
+in whole or in part, without prior written consent of all authors.
+
+All authors share equal ownership of this work and agree that 
+any licensing or commercialization decisions must be made collectively.

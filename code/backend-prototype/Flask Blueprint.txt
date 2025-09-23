@@ -1,0 +1,38 @@
+# app.py
+
+#Flask and Flask-SQLAlchemy Libraries
+from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
+import os
+from config import SQLALCHEMY_DATABASE_URI
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# tune pool in production: SQLALCHEMY_ENGINE_OPTIONS = {'pool_size': 10, 'max_overflow': 20, 'pool_pre_ping': True}
+db = SQLAlchemy(app)
+
+# Example model (map to FeeRecords table)
+class FeeRecord(db.Model):
+    __tablename__ = 'FeeRecords'
+    FeeRecordID = db.Column(db.BigInteger, primary_key=True)
+    AssetID = db.Column(db.Integer, db.ForeignKey('Assets.AssetID'), nullable=False)
+    ReportingDate = db.Column(db.Date, nullable=False)
+    FeePct = db.Column(db.Numeric(18,8))
+    FeeAmount = db.Column(db.Numeric(18,6))
+
+
+#"@app.route" indicates the the start of a certain function or  method"
+@app.route('/api/assets/<int:asset_id>/fees')
+def get_fees(asset_id):
+    q = FeeRecord.query.filter_by(AssetID=asset_id).order_by(FeeRecord.ReportingDate.desc()).limit(100)
+    results = [{
+        'FeeRecordID': r.FeeRecordID,
+        'ReportingDate': r.ReportingDate.isoformat(),
+        'FeePct': float(r.FeePct) if r.FeePct is not None else None
+    } for r in q]
+    return jsonify(results)
+
+#Normal main function
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,0 +1,11 @@
+property_address,line_date,description,line_type,net_amount,source_agent,statement_date,statement_number,reference,document_type,source_file_name,opening_balance,closing_balance,float_held,reserve_held,cashflow_class
+60 Bryce Avenue,6/10/2025,Landlord Receipt Ref: Ayq Ltd DJC230103 BGCFrom:,receipt_to_client_account,4502,DJ Alexander,6/10/2025,159,DJC230103,Landlord Statement,20250610.pdf,0,0,,,transfer
+60 Bryce Avenue,6/10/2025,Invoice from Property Care Scotland: Decoration Works,expenditure_maintenance,-260,DJ Alexander,6/10/2025,159,DJC230103,Landlord Statement,20250610.pdf,0,0,,,expense
+60 Bryce Avenue,6/10/2025,Invoice from Property Care Scotland: Refurbishment,expenditure_maintenance,-2045,DJ Alexander,6/10/2025,159,DJC230103,Landlord Statement,20250610.pdf,0,0,,,expense
+60 Bryce Avenue,6/10/2025,Invoice from Local Window Care and Repair Ltd: CO,expenditure_maintenance,0,DJ Alexander,6/10/2025,159,DJC230103,Landlord Statement,20250610.pdf,0,0,,,expense
+"38 Arranview Street, ML6 8XN",8/19/2025,Rent received 15/08/2025 - 14/09/2025,income_rent,525,TM Residential,8/19/2025,,,Landlord Statement,20250819.pdf,,,,,income
+"38 Arranview Street, ML6 8XN",8/19/2025,Management fee (10%),expenditure_fee,-52.5,TM Residential,8/19/2025,,,Landlord Statement,20250819.pdf,,,,,expense
+18H Rannoch Drive,9/9/2025,Rent from 09/09/2025 to 08/10/2025,income_rent,826.8,DJ Alexander,9/9/2025,174,DJC230103,Landlord Statement,20250909.pdf,2161.6,2161.6,250,1911.6,income
+18H Rannoch Drive,9/9/2025,Management fees for 09/09/2025 to 08/10/2025,expenditure_fee,-59,DJ Alexander,9/9/2025,174,DJC230103,Landlord Statement,20250909.pdf,2161.6,2161.6,250,1911.6,expense
+18H Rannoch Drive,9/9/2025,Payment to Landlord,landlord_payment,-756,DJ Alexander,9/9/2025,174,DJC230103,Landlord Statement,20250909.pdf,2161.6,2161.6,250,1911.6,transfer
+18H Rannoch Drive,9/9/2025,SAC583440 Management fees for  20%,expenditure_fee,-59,DJ Alexander,9/9/2025,174,DJC230103,Landlord Statement,20250909.pdf,2161.6,2161.6,250,1911.6,expense

@@ -1,0 +1,16 @@
+NOTE:
+1. "SQLAlcehmy acts as ORM(Object Relational Mapper) by connecting SQL's tables and rows with  python's objects."
+2. "SQLAlchemy-Flask is a Flask extension, which acts as a bridge by integrating SQLAlchemy and Flask application 	for easier communication between database and the framework."
+
+
+# config.py
+import os, urllib.parse
+
+params = urllib.parse.quote_plus(
+    "DRIVER={ODBC Driver 17 for SQL Server};"
+    f"SERVER={os.environ['DB_SERVER']},{os.environ.get('DB_PORT',1433)};"
+    f"DATABASE={os.environ['DB_NAME']};"
+    f"UID={os.environ['DB_USER']};PWD={os.environ['DB_PASS']};"
+    "Encrypt=yes;TrustServerCertificate=yes;"
+)
+SQLALCHEMY_DATABASE_URI = f"mssql+pyodbc:///?odbc_connect={params}"

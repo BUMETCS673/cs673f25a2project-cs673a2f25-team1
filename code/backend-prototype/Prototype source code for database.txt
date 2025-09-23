@@ -1,0 +1,175 @@
+-- Create DB (adjust name / collations as needed)
+CREATE DATABASE AssetInsights;
+GO
+USE AssetInsights;
+GO
+
+-- Landlords (portfolio owners)
+CREATE TABLE dbo.Landlords (
+    LandlordID INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(200) NOT NULL,
+    ContactEmail NVARCHAR(200),
+    ContactPhone NVARCHAR(50),
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    IsActive BIT DEFAULT 1
+);
+
+-- Portfolios (grouping under landlord)
+CREATE TABLE dbo.Portfolios (
+    PortfolioID INT IDENTITY(1,1) PRIMARY KEY,
+    LandlordID INT NOT NULL,
+    Name NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(1000),
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    FOREIGN KEY (LandlordID) REFERENCES dbo.Landlords(LandlordID)
+);
+
+-- Assets (landlord-centric assets)
+CREATE TABLE dbo.Assets (
+    AssetID INT IDENTITY(1,1) PRIMARY KEY,
+    PortfolioID INT NOT NULL,
+    AssetType NVARCHAR(100) NOT NULL, -- e.g. "multifamily", "office", "loan"
+    Identifier NVARCHAR(200), -- external ID
+    Address NVARCHAR(500),
+    Region NVARCHAR(200),
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    IsActive BIT DEFAULT 1,
+    FOREIGN KEY (PortfolioID) REFERENCES dbo.Portfolios(PortfolioID)
+);
+
+-- Asset managers
+CREATE TABLE dbo.AssetManagers (
+    AssetManagerID INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(200) NOT NULL,
+    ContactEmail NVARCHAR(200),
+    ContactPhone NVARCHAR(50),
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    IsActive BIT DEFAULT 1
+);
+
+-- Management contracts linking manager and asset (raw contract stored optionally)
+CREATE TABLE dbo.ManagementContracts (
+    ContractID INT IDENTITY(1,1) PRIMARY KEY,
+    AssetID INT NOT NULL,
+    AssetManagerID INT NOT NULL,
+    StartDate DATE NOT NULL,
+    EndDate DATE NULL,
+    FeeStructure NVARCHAR(100) NULL, -- 'percentage','flat','tiered'
+    FeeBasis NVARCHAR(100) NULL,     -- 'AUM','GrossRent', etc
+    RawContractDocument VARBINARY(MAX) NULL,
+    RawContractText NVARCHAR(MAX) NULL,
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    FOREIGN KEY (AssetID) REFERENCES dbo.Assets(AssetID),
+    FOREIGN KEY (AssetManagerID) REFERENCES dbo.AssetManagers(AssetManagerID)
+);
+
+-- Ingestion log for raw files / rows (preserve imperfect labels)
+CREATE TABLE dbo.IngestionLog (
+    IngestID INT IDENTITY(1,1) PRIMARY KEY,
+    SourceName NVARCHAR(200),
+    SourceFile NVARCHAR(500),
+    ReceivedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    RowsReceived INT,
+    ParseStatus NVARCHAR(50),
+    ParseErrors NVARCHAR(MAX),
+    RawPayload NVARCHAR(MAX)
+);
+
+-- Canonical Fee time-series (the main fact table)
+CREATE TABLE dbo.FeeRecords (
+    FeeRecordID BIGINT IDENTITY(1,1) PRIMARY KEY,
+    AssetID INT NOT NULL,
+    ContractID INT NULL,
+    ReportingDate DATE NOT NULL,
+    FeeAmount DECIMAL(18,6) NULL,
+    FeePct DECIMAL(18,8) NULL,              -- 0.0125 = 1.25%
+    BasisAmount DECIMAL(26,6) NULL,         -- e.g. AUM or GrossRent basis
+    SourceLabel NVARCHAR(200) NULL,         -- raw label from parser
+    SourceConfidence FLOAT NULL,            -- parser/ML confidence
+    IngestID INT NULL,
+    NormalizedBy NVARCHAR(200) NULL,
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    IsCleaned BIT DEFAULT 0,
+    FOREIGN KEY (AssetID) REFERENCES dbo.Assets(AssetID),
+    FOREIGN KEY (ContractID) REFERENCES dbo.ManagementContracts(ContractID),
+    FOREIGN KEY (IngestID) REFERENCES dbo.IngestionLog(IngestID),
+    CONSTRAINT CHK_FeePct_NonNegative CHECK (FeePct IS NULL OR FeePct >= 0)
+);
+
+-- Performance metrics time-series (NOI, GrossRent, AUM, etc.)
+CREATE TABLE dbo.PerformanceRecords (
+    PerfID BIGINT IDENTITY(1,1) PRIMARY KEY,
+    AssetID INT NOT NULL,
+    MetricDate DATE NOT NULL,
+    MetricType NVARCHAR(100) NOT NULL,
+    MetricValue DECIMAL(26,6) NULL,
+    SourceLabel NVARCHAR(200) NULL,
+    IngestID INT NULL,
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    FOREIGN KEY (AssetID) REFERENCES dbo.Assets(AssetID),
+    FOREIGN KEY (IngestID) REFERENCES dbo.IngestionLog(IngestID)
+);
+
+-- ML interpretation outputs for traceability
+CREATE TABLE dbo.MLInterpretations (
+    InterpretationID BIGINT IDENTITY(1,1) PRIMARY KEY,
+    FeeRecordID BIGINT NULL,
+    InterpretationDate DATETIME2 DEFAULT SYSUTCDATETIME(),
+    InferredFeePct DECIMAL(18,8) NULL,
+    ConfidenceScore FLOAT NULL,
+    LabelsExtracted NVARCHAR(MAX) NULL,  -- JSON blob of parsed labels
+    ModelVersion NVARCHAR(50) NULL,
+    Notes NVARCHAR(MAX) NULL,
+    FOREIGN KEY (FeeRecordID) REFERENCES dbo.FeeRecords(FeeRecordID)
+);
+
+-- Anomaly records discovered (automated or manual)
+CREATE TABLE dbo.Anomalies (
+    AnomalyID BIGINT IDENTITY(1,1) PRIMARY KEY,
+    LandlordID INT NULL,
+    AssetManagerID INT NULL,
+    AssetID INT NULL,
+    DetectedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    AnomalyType NVARCHAR(100) NOT NULL,  -- 'fee_high_vs_peers', 'missing_basis', ...
+    AnomalyScore FLOAT NULL,
+    Details NVARCHAR(MAX) NULL,          -- JSON with context (median, percentiles, etc)
+    IsResolved BIT DEFAULT 0,
+    ResolvedBy NVARCHAR(200) NULL,
+    ResolvedAt DATETIME2 NULL,
+    FOREIGN KEY (LandlordID) REFERENCES dbo.Landlords(LandlordID),
+    FOREIGN KEY (AssetManagerID) REFERENCES dbo.AssetManagers(AssetManagerID),
+    FOREIGN KEY (AssetID) REFERENCES dbo.Assets(AssetID)
+);
+
+-- Peer benchmarks for quick lookups
+CREATE TABLE dbo.PeersBenchmark (
+    BenchmarkID INT IDENTITY(1,1) PRIMARY KEY,
+    AssetType NVARCHAR(100) NULL,
+    Region NVARCHAR(200) NULL,
+    PeriodStart DATE NULL,
+    PeriodEnd DATE NULL,
+    MedianFeePct DECIMAL(18,8) NULL,
+    P90FeePct DECIMAL(18,8) NULL,
+    SampleSize INT NULL,
+    Source NVARCHAR(200) NULL,
+    ComputedAt DATETIME2 DEFAULT SYSUTCDATETIME()
+);
+
+-- App users (for simple auth; prefer external SSO in prod)
+CREATE TABLE dbo.AppUsers (
+    UserID INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(150) UNIQUE NOT NULL,
+    Email NVARCHAR(200),
+    PasswordHash NVARCHAR(500),
+    Role NVARCHAR(50),
+    CreatedAt DATETIME2 DEFAULT SYSUTCDATETIME(),
+    IsActive BIT DEFAULT 1
+);
+
+-- Useful indexes
+CREATE INDEX IX_FeeRecords_AssetDate ON dbo.FeeRecords (AssetID, ReportingDate);
+CREATE INDEX IX_FeeRecords_FeePct ON dbo.FeeRecords (FeePct) INCLUDE (AssetID, ReportingDate);
+CREATE INDEX IX_Assets_PortfolioRegion ON dbo.Assets (PortfolioID, Region);
+CREATE INDEX IX_Contracts_AssetManager ON dbo.ManagementContracts (AssetManagerID);
+CREATE INDEX IX_IngestionLog_ReceivedAt ON dbo.IngestionLog (ReceivedAt);
+GO
