@@ -1,17 +1,17 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
-from dotenv import load_dotenv
+from config import get_config
 from db import db
 
-load_dotenv()
-
 app = Flask(__name__)
-CORS(app)
 
-# Database configuration for Microsoft SQL Server
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'mssql+pyodbc://sa:Sujan210802!@localhost/AYQ?driver=ODBC+Driver+17+for+SQL+Server')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Load configuration based on environment
+config_class = get_config()
+app.config.from_object(config_class)
+
+# Initialize CORS with configuration
+CORS(app, origins=app.config['CORS_ORIGINS'])
 
 db.init_app(app)
 
@@ -71,4 +71,5 @@ if __name__ == '__main__':
             print("Database tables created successfully")
         except Exception as e:
             print(f"Database connection error: {e}")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.getenv('PORT', '5000'))
+    app.run(host='0.0.0.0', port=port, debug=True)

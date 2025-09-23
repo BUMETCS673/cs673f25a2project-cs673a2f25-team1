@@ -1,7 +1,7 @@
 Flask>=2.3.3
 Flask-SQLAlchemy>=3.0.5
 Flask-CORS>=4.0.0
-pymysql>=1.1.0
+psycopg2-binary>=2.9.0
 pandas>=2.1.0
 numpy>=1.25.0
 scikit-learn>=1.4.0

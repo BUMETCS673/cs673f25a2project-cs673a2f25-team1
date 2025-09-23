@@ -2,21 +2,28 @@ from app import app, db
 from models import Portfolio, Asset, Fee
 from datetime import datetime, timedelta
 import random
+import os
 
 def add_sample_data():
     with app.app_context():
         # Create tables if they don't exist
         db.create_all()
 
-        # Clear existing data
+        # Clear existing data (with better error handling for different databases)
         try:
-            db.session.query(Fee).delete()
-            db.session.query(Asset).delete()
-            db.session.query(Portfolio).delete()
+            # Use cascade delete for PostgreSQL, individual deletes for SQLite
+            if 'postgresql' in os.getenv('DATABASE_URL', '').lower():
+                # PostgreSQL - use CASCADE
+                db.session.execute(db.text('TRUNCATE TABLE fees, assets, portfolios RESTART IDENTITY CASCADE'))
+            else:
+                # SQLite - individual deletes
+                db.session.query(Fee).delete()
+                db.session.query(Asset).delete()
+                db.session.query(Portfolio).delete()
             db.session.commit()
-        except:
-            # Tables might not exist yet, skip deletion
-            pass
+        except Exception as e:
+            print(f"Note: Could not clear existing data (this is normal for first run): {e}")
+            db.session.rollback()
 
         # Create sample portfolios
         portfolios = [
