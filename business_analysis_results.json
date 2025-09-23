@@ -1,0 +1,277 @@
+{
+  "analysis_metadata": {
+    "generated_at": "2025-09-22T22:16:31.544441",
+    "data_sources": [
+      "rental_statements",
+      "tenancy_agreements",
+      "unified_schema"
+    ],
+    "analysis_version": "1.0",
+    "total_records_analyzed": 134
+  },
+  "property_level_kpis": {
+    "97B Dempster": {
+      "financial_summary": {
+        "total_rent": 13776.85,
+        "total_management_fee": 1837.27,
+        "total_repair_costs": 1643.64,
+        "total_miscellaneous": 618.0,
+        "total_deposits": 1425.3,
+        "net_income": 9677.94
+      },
+      "monthly_averages": {
+        "avg_monthly_rent": 417.48,
+        "avg_monthly_mgmt_fee": 55.67,
+        "avg_monthly_repair": 49.81,
+        "avg_monthly_cash_flow": 293.27
+      },
+      "cost_ratios": {
+        "management_fee_ratio": 13.34,
+        "repair_cost_ratio": 11.93,
+        "total_cost_ratio": 29.75
+      },
+      "performance_metrics": {
+        "net_yield_percentage": 11.59,
+        "cash_flow_volatility": 0.49,
+        "vacancy_rate_percentage": 3.03,
+        "months_analyzed": 33
+      },
+      "date_range": {
+        "start": "2022-04-21",
+        "end": "2025-01-04"
+      }
+    },
+    "Arranview": {
+      "financial_summary": {
+        "total_rent": 18954.9,
+        "total_management_fee": 1895.49,
+        "total_repair_costs": 1858.0,
+        "total_miscellaneous": 45.0,
+        "total_deposits": 0.0,
+        "net_income": 15156.41
+      },
+      "monthly_averages": {
+        "avg_monthly_rent": 574.39,
+        "avg_monthly_mgmt_fee": 57.44,
+        "avg_monthly_repair": 56.3,
+        "avg_monthly_cash_flow": 459.29
+      },
+      "cost_ratios": {
+        "management_fee_ratio": 10.0,
+        "repair_cost_ratio": 9.8,
+        "total_cost_ratio": 20.04
+      },
+      "performance_metrics": {
+        "net_yield_percentage": 13.19,
+        "cash_flow_volatility": 0.25,
+        "vacancy_rate_percentage": 0.0,
+        "months_analyzed": 33
+      },
+      "date_range": {
+        "start": "2023-01-17",
+        "end": "2025-08-19"
+      }
+    },
+    "Bedford": {
+      "financial_summary": {
+        "total_rent": 27150.0,
+        "total_management_fee": 2715.0,
+        "total_repair_costs": 1307.0,
+        "total_miscellaneous": 575.0,
+        "total_deposits": 0.0,
+        "net_income": 22553.0
+      },
+      "monthly_averages": {
+        "avg_monthly_rent": 399.26,
+        "avg_monthly_mgmt_fee": 39.93,
+        "avg_monthly_repair": 19.22,
+        "avg_monthly_cash_flow": 331.66
+      },
+      "cost_ratios": {
+        "management_fee_ratio": 10.0,
+        "repair_cost_ratio": 4.81,
+        "total_cost_ratio": 16.93
+      },
+      "performance_metrics": {
+        "net_yield_percentage": 28.24,
+        "cash_flow_volatility": 0.2,
+        "vacancy_rate_percentage": 0.0,
+        "months_analyzed": 68
+      },
+      "date_range": {
+        "start": "2020-01-05",
+        "end": "2025-08-21"
+      }
+    }
+  },
+  "portfolio_level_analytics": {
+    "portfolio_summary": {
+      "total_properties": 3,
+      "total_months_analyzed": 134,
+      "total_rental_income": 59881.75,
+      "total_management_fees": 6447.76,
+      "total_repair_costs": 4808.64,
+      "total_miscellaneous": 1238.0,
+      "net_portfolio_income": 47387.35
+    },
+    "portfolio_ratios": {
+      "avg_management_fee_ratio": 10.77,
+      "avg_repair_cost_ratio": 8.03,
+      "avg_total_cost_ratio": 20.87
+    },
+    "cash_flow_analysis": {
+      "avg_monthly_cash_flow": 353.64,
+      "cash_flow_volatility": 0.34,
+      "cash_flow_std_deviation": 119.36
+    },
+    "vacancy_analysis": {
+      "total_vacancy_months": 1,
+      "portfolio_vacancy_rate": 0.75
+    }
+  },
+  "agent_performance_analysis": {
+    "agent_performance": {
+      "Purplebricks": {
+        "properties_managed": 13,
+        "unique_properties": 11,
+        "avg_rent": 432.69,
+        "total_rent": 5625.0,
+        "tenancy_count": 13
+      },
+      "TM": {
+        "properties_managed": 27,
+        "unique_properties": 15,
+        "avg_rent": 546.3,
+        "total_rent": 14750.0,
+        "tenancy_count": 27
+      },
+      "MHK": {
+        "properties_managed": 5,
+        "unique_properties": 3,
+        "avg_rent": 429.0,
+        "total_rent": 2145.0,
+        "tenancy_count": 5
+      },
+      "Jewel Homes": {
+        "properties_managed": 4,
+        "unique_properties": 2,
+        "avg_rent": 400.0,
+        "total_rent": 1600.0,
+        "tenancy_count": 4
+      },
+      "DJ Alexander": {
+        "properties_managed": 4,
+        "unique_properties": 3,
+        "avg_rent": 655.0,
+        "total_rent": 2620.0,
+        "tenancy_count": 4
+      }
+    },
+    "agent_comparison": {
+      "total_agents": 5,
+      "avg_properties_per_agent": 11.8
+    }
+  },
+  "market_intelligence": {
+    "industry_benchmarks": {
+      "management_fee_range": {
+        "min": 8.0,
+        "max": 12.0,
+        "typical": 10.0
+      },
+      "repair_cost_range": {
+        "min": 15.0,
+        "max": 25.0,
+        "typical": 20.0
+      },
+      "vacancy_rate_range": {
+        "min": 2.0,
+        "max": 8.0,
+        "typical": 5.0
+      }
+    },
+    "portfolio_vs_benchmarks": {
+      "management_fee_comparison": {
+        "portfolio_ratio": 10.77,
+        "industry_typical": 10.0,
+        "performance": "above_benchmark",
+        "optimization_potential": 0.77
+      },
+      "repair_cost_comparison": {
+        "portfolio_ratio": 8.03,
+        "industry_typical": 20.0,
+        "performance": "below_benchmark"
+      },
+      "vacancy_rate_comparison": {
+        "portfolio_rate": 0.75,
+        "industry_typical": 5.0,
+        "performance": "below_benchmark"
+      }
+    },
+    "market_positioning": {
+      "cost_efficiency_score": 89.23,
+      "maintenance_efficiency_score": 91.97,
+      "occupancy_efficiency_score": 99.25
+    }
+  },
+  "predictive_analytics": {
+    "seasonal_analysis": {
+      "monthly_rent_patterns": {
+        "January": 533.64,
+        "February": 425.0,
+        "March": 425.99,
+        "April": 538.04,
+        "May": 432.5,
+        "June": 432.69,
+        "July": 410.85,
+        "August": 384.09,
+        "September": 516.67,
+        "October": 415.91,
+        "November": 419.23,
+        "December": 417.5
+      },
+      "peak_month": "April",
+      "low_month": "August"
+    },
+    "trend_analysis": {
+      "rent_trend_slope": 17.35,
+      "trend_direction": "increasing",
+      "months_analyzed": 61
+    },
+    "cost_forecasting": {
+      "predicted_monthly_repair": 35.89,
+      "predicted_monthly_mgmt_fee": 48.12,
+      "forecast_confidence": "medium"
+    }
+  },
+  "risk_assessment": {
+    "payment_risk": {
+      "payment_delay_rate": 23.88,
+      "delayed_payments_count": 32,
+      "risk_level": "high"
+    },
+    "concentration_risk": {
+      "max_property_concentration": 50.75,
+      "max_agent_concentration": 45.76,
+      "diversification_score": 49.25
+    },
+    "compliance_risk": {
+      "certificate_related_costs": 7,
+      "compliance_risk_score": 5.22,
+      "risk_level": "low"
+    }
+  },
+  "operational_efficiency": {
+    "processing_efficiency": {
+      "total_statements_processed": 134,
+      "successful_extractions": 133,
+      "extraction_success_rate": 99.25,
+      "error_rate": 1.49
+    },
+    "quality_metrics": {
+      "data_completeness": 99.25,
+      "processing_accuracy": 98.51,
+      "automation_readiness": "high"
+    }
+  }
+}
