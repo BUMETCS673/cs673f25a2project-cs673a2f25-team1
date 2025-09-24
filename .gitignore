@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual env
+AssetManagementAnomalyDetection/.venv/
+
+# Flask logs/pids
+AssetManagementAnomalyDetection/.flask.log
+AssetManagementAnomalyDetection/.flask.pid
+
+# Env secrets
+AssetManagementAnomalyDetection/.env
+
+# SQLite DBs
+AssetManagementAnomalyDetection/instance/*.db
+AssetManagementAnomalyDetection/instance/*.sqlite
+
+# ML artifacts
+AssetManagementAnomalyDetection/ml/*.pkl
+
+# Frontend build/deps
+AssetManagementAnomalyDetection/frontend/node_modules/
+AssetManagementAnomalyDetection/frontend/.frontend.log
+AssetManagementAnomalyDetection/frontend/.frontend.pid
+
+# Bundles/archives
+AssetManagementAnomalyDetection/deployment.zip
+
+# OS/editor
+.DS_Store
