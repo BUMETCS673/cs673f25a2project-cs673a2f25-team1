@@ -1,4 +1,4 @@
-Copyright © 2025 [Xinwen Fang, Ming Leong "Lucas" Tsui, Xinyu Wang, Zihan W].
+Copyright © 2025 [Xinwen Fang, Ming Leong "Lucas" Tsui, Xinyu Wang, Zihan W, Boya Zhou, Sujan Gowda].
 All Rights Reserved.
 
 This repository is a joint work authored by the above contributors

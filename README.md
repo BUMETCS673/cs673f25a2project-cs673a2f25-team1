@@ -1,4 +1,4 @@
-## Asset Management Anomaly Detection – Monorepo
+## About
 
 This project is an end-to-end data pipeline that ingest transactional data in the form of pdf statements with multiple layouts to generate business insights and visually present them. This repo contains:
 - A Flask backend with SQLAlchemy and a simple anomaly detection pipeline
