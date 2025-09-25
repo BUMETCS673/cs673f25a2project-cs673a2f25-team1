@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AZURE_SQL_SERVER": "asset-management-sql",
+    "AZURE_SQL_DATABASE": "AssetManagementDB",
+    "AZURE_SQL_USERNAME": "sqladmin",
+    "AZURE_SQL_PASSWORD": ""
+  }
+}
+

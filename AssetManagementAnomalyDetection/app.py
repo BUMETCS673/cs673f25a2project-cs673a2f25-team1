@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from db import db
+from sqlalchemy import text
 
 load_dotenv()
 
@@ -115,6 +116,19 @@ def run_anomaly_detection(portfolio_id):
 	db.session.commit()
 
 	return jsonify({'message': 'Anomaly detection completed', 'anomalies_found': len(anomalies)})
+
+@app.route('/api/statement-raw', methods=['GET'])
+def get_statement_raw():
+    limit = int(request.args.get('limit', 5))
+    limit = max(1, min(limit, 100))
+    rows = []
+    try:
+        result = db.session.execute(text(f"SELECT TOP {limit} id, line FROM dbo.statement_raw ORDER BY id"))
+        for r in result:
+            rows.append({'id': int(r.id), 'line': str(r.line)})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    return jsonify(rows)
 
 if __name__ == '__main__':
 	with app.app_context():
