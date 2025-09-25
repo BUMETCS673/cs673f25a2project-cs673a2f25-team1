@@ -1,0 +1,9 @@
+# Azure App Service Environment Variables
+# Set these in Azure Portal > App Service > Configuration > Application Settings
+
+AZURE_SQL_SERVER=your-server-name
+AZURE_SQL_DATABASE=your-database-name
+AZURE_SQL_USERNAME=your-username
+AZURE_SQL_PASSWORD=your-password
+FLASK_ENV=production
+FLASK_APP=app.py
