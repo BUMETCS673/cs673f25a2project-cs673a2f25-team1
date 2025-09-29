@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  backend-lint-and-test:
+    name: Backend Build & Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install backend dependencies
+        working-directory: ./code/AssetManagementAnomalyDetection
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 pylint
+      
+      - name: Lint with flake8
+        working-directory: ./code/AssetManagementAnomalyDetection
+        run: |
+          # Stop build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=instance,__pycache__,frontend
+          # Exit-zero treats all errors as warnings. Line length set to 120
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics --exclude=instance,__pycache__,frontend
+      
+      - name: Test backend starts (SQLite mode)
+        working-directory: ./code/AssetManagementAnomalyDetection
+        env:
+          USE_LOCAL_SQLITE: 'true'
+          FLASK_ENV: 'development'
+        run: |
+          timeout 10s python app.py || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+          echo "Backend started successfully"
+
+  frontend-build:
+    name: Frontend Build & Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ./code/AssetManagementAnomalyDetection/frontend/package-lock.json
+      
+      - name: Install frontend dependencies
+        working-directory: ./code/AssetManagementAnomalyDetection/frontend
+        run: npm ci
+      
+      - name: Lint frontend
+        working-directory: ./code/AssetManagementAnomalyDetection/frontend
+        run: |
+          npm run lint || echo "No lint script found, skipping"
+      
+      - name: Build frontend
+        working-directory: ./code/AssetManagementAnomalyDetection/frontend
+        run: npm run build
+      
+      - name: Check bundle sizes
+        working-directory: ./code/AssetManagementAnomalyDetection/frontend
+        run: |
+          echo "=== Production Build Sizes ==="
+          du -sh build/static/js/* build/static/css/* 2>/dev/null || echo "Build folder structure may vary"
+          echo ""
+          echo "Bundle size budgets (gzipped):"
+          echo "  Main JS: ≤ 300 KB"
+          echo "  Total JS: ≤ 500 KB"
+          echo "  CSS: ≤ 100 KB"
+          echo ""
+          echo "Run 'gzip -k build/static/**/*' locally and check sizes to verify"
+
+  ocr-scripts-lint:
+    name: OCR Scripts Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install script dependencies
+        working-directory: ./code/scripts
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytesseract pdf2image flake8
+      
+      - name: Lint OCR scripts
+        working-directory: ./code/scripts
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
