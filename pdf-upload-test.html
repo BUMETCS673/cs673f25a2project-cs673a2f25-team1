@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF OCR Test - CS673 Team 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .endpoint-selector {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .endpoint-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        .endpoint-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .endpoint-option:hover {
+            background: #e9ecef;
+        }
+        .endpoint-option input {
+            margin-right: 10px;
+        }
+        .endpoint-url {
+            font-size: 11px;
+            color: #6c757d;
+            margin-left: 25px;
+            word-break: break-all;
+        }
+        .upload-area {
+            border: 3px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            background: #fafafa;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #f0f3ff;
+            transform: scale(1.02);
+        }
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .file-input {
+            display: none;
+        }
+        .file-label {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+        .file-label:hover {
+            background: #5a67d8;
+        }
+        .selected-file {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            color: #2e7d32;
+            display: none;
+        }
+        .process-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+        .process-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .process-btn:disabled {
+            background: #dee2e6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .loading {
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+            color: #004085;
+        }
+        .result h3 {
+            margin-bottom: 10px;
+        }
+        .result pre {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 PDF OCR Test</h1>
+        <div class="subtitle">CS673 Team 1 - Asset Management Anomaly Detection</div>
+
+        <div class="endpoint-selector">
+            <div class="endpoint-title">Select Backend Endpoint:</div>
+            <label class="endpoint-option">
+                <input type="radio" name="endpoint" value="azure" checked>
+                <span>☁️ Azure (Production)</span>
+            </label>
+            <div class="endpoint-url">https://ocr-backend-app.azurewebsites.net</div>
+
+            <label class="endpoint-option">
+                <input type="radio" name="endpoint" value="local">
+                <span>💻 Local (Development)</span>
+            </label>
+            <div class="endpoint-url">http://127.0.0.1:5001 (requires local server)</div>
+        </div>
+
+        <div class="note">
+            ⚠️ <strong>Note:</strong> Azure may take 30-60 seconds on first request (cold start). Local endpoint only works if backend is running on your machine.
+        </div>
+
+        <div class="upload-area" onclick="document.getElementById('pdfFile').click()">
+            <div class="upload-icon">📄</div>
+            <p style="margin-bottom: 15px;"><strong>Drag & Drop PDF here</strong></p>
+            <p style="color: #6c757d; margin-bottom: 15px;">or</p>
+            <label for="pdfFile" class="file-label">Choose File</label>
+            <input type="file" id="pdfFile" class="file-input" accept=".pdf">
+            <div class="selected-file" id="selectedFile"></div>
+        </div>
+
+        <button class="process-btn" id="processBtn" onclick="uploadPDF()" disabled>
+            Select a PDF to Process
+        </button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const uploadArea = document.querySelector('.upload-area');
+        const fileInput = document.getElementById('pdfFile');
+        const selectedFileDiv = document.getElementById('selectedFile');
+        const processBtn = document.getElementById('processBtn');
+        const resultDiv = document.getElementById('result');
+
+        // Drag and drop handlers
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                fileInput.files = files;
+                handleFileSelect();
+            } else {
+                alert('Please drop a PDF file');
+            }
+        });
+
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect() {
+            const file = fileInput.files[0];
+            if (file) {
+                selectedFileDiv.innerHTML = `✅ Selected: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+                selectedFileDiv.style.display = 'block';
+                processBtn.disabled = false;
+                processBtn.textContent = 'Process PDF';
+            }
+        }
+
+        async function uploadPDF() {
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a PDF file');
+                return;
+            }
+
+            const endpoint = document.querySelector('input[name="endpoint"]:checked').value;
+            const url = endpoint === 'azure'
+                ? 'https://ocr-backend-app.azurewebsites.net/api/upload-pdf'
+                : 'http://127.0.0.1:5001/api/upload-pdf';
+
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<span class="spinner"></span> Processing...';
+
+            resultDiv.className = 'result loading';
+            resultDiv.innerHTML = '<h3>⏳ Processing PDF...</h3><p>This may take 30-60 seconds on Azure (cold start)</p>';
+            resultDiv.style.display = 'block';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    let html = '<h3>✅ Success!</h3>';
+                    if (data.confidence) {
+                        html += `<p><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(0)}%</p>`;
+                    }
+                    if (data.data) {
+                        html += '<p><strong>Extracted Data:</strong></p>';
+                        html += '<ul>';
+                        for (const [key, value] of Object.entries(data.data)) {
+                            if (value !== null) {
+                                html += `<li>${key}: $${value.toFixed(2)}</li>`;
+                            }
+                        }
+                        html += '</ul>';
+                    }
+                    html += '<p><strong>Raw Response:</strong></p>';
+                    html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = '<h3>❌ Error</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<h3>❌ Network Error</h3><p>' + error.message + '</p>' +
+                    '<p><strong>Tip:</strong> If using local endpoint, make sure the backend is running on port 5001.</p>';
+            } finally {
+                processBtn.disabled = false;
+                processBtn.textContent = 'Process PDF';
+            }
+        }
+    </script>
+</body>
+</html>
