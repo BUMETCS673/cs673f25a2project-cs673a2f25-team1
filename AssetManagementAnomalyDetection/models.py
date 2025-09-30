@@ -1,6 +1,17 @@
 from db import db
 from datetime import datetime
 
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 class Portfolio(db.Model):
     __tablename__ = 'portfolios'
 
@@ -8,12 +19,14 @@ class Portfolio(db.Model):
     name = db.Column(db.String(100), nullable=False)
     manager = db.Column(db.String(100), nullable=False)
     total_assets = db.Column(db.Float, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  # Make optional for now
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationships
     assets = db.relationship('Asset', backref='portfolio', lazy=True)
     fees = db.relationship('Fee', backref='portfolio', lazy=True)
     anomalies = db.relationship('Anomaly', backref='portfolio', lazy=True)
+    user = db.relationship('User', backref='portfolios')
 
 class Asset(db.Model):
     __tablename__ = 'assets'
