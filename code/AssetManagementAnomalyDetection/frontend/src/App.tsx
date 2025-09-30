@@ -105,6 +105,14 @@ function App() {
             Asset Management Anomaly Detection
           </Typography>
 
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Typography variant="body1">
+              📄 <a href="/pdf-test.html" target="_blank" rel="noopener noreferrer">
+                Open PDF Upload Test Page
+              </a>
+            </Typography>
+          </Paper>
+
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
               <Paper sx={{ p: 2 }}>

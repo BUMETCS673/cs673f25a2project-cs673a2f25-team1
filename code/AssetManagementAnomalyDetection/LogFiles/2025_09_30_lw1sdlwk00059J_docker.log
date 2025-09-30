@@ -1,0 +1,120 @@
+2025-09-30T03:19:40.7352779Z Container start method called.
+2025-09-30T03:19:40.7537856Z Establishing network.
+2025-09-30T03:19:40.7545253Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-09-30T03:19:46.4944263Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-09-30T03:19:46.4961970Z Container is terminating. Grace period: 5 seconds.
+2025-09-30T03:19:46.5044716Z Container spec TerminationMessagePolicy  path 
+2025-09-30T03:19:46.5054485Z Container is terminated. Total time elapsed: 7 ms.
+2025-09-30T03:19:46.5067557Z Site container: ocr-backend-app terminated during site startup.
+2025-09-30T03:19:46.5425724Z Failed to start site. Revert by stopping site.
+2025-09-30T03:19:46.5432835Z Site: ocr-backend-app stopped.
+2025-09-30T03:19:50.862Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:19:51.496Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:19:51.513Z INFO  -  
+2025-09-30T03:19:51.514Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:19:51.517Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:19:51.522Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:19:51.759Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: 1490a2b0-8088-45f0-8a02-94a7824b09c9\"}]}"}
+
+2025-09-30T03:19:51.765Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:19:51.768Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:19:51.776Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T03:21:55.429Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:21:56.015Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:21:56.029Z INFO  -  
+2025-09-30T03:21:56.031Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:21:56.039Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:21:56.040Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:21:56.289Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: b2f8888a-739b-463f-b58e-2d251208bccf\"}]}"}
+
+2025-09-30T03:21:56.291Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:21:56.295Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:21:56.331Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T03:24:27.497Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:24:28.180Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:24:28.195Z INFO  -  
+2025-09-30T03:24:28.199Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:24:28.203Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:24:28.209Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:24:28.438Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: ababf05b-a69f-44a6-bd6b-c407dc4e12ef\"}]}"}
+
+2025-09-30T03:24:28.441Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:24:28.450Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:24:28.460Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T03:26:55.009Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:26:55.648Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:26:55.661Z INFO  -  
+2025-09-30T03:26:55.662Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:26:55.668Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:26:55.670Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:26:55.916Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: 6d70b545-a86b-4c1b-b5a0-5b69e7a4fb7b\"}]}"}
+
+2025-09-30T03:26:55.917Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:26:55.935Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:26:55.947Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T03:29:30.036Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:29:30.806Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:29:30.844Z INFO  -  
+2025-09-30T03:29:30.845Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:29:30.855Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:29:30.862Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:29:31.256Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: 786d7b02-aeab-4b54-9e53-64a6be556300\"}]}"}
+
+2025-09-30T03:29:31.259Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:29:31.287Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:29:31.308Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T03:31:59.246Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:31:59.845Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:31:59.858Z INFO  -  
+2025-09-30T03:31:59.859Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:31:59.870Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:31:59.876Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:32:00.155Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: 74018191-e5e2-4a38-a11b-27a0a0f0b209\"}]}"}
+
+2025-09-30T03:32:00.172Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:32:00.174Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:32:00.191Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T03:52:52.851Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:52:53.590Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:52:53.603Z INFO  -  
+2025-09-30T03:52:53.603Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:52:53.607Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:52:53.607Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:52:53.858Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: 494febe3-dcff-43de-8a5f-80ad7a192d8b\"}]}"}
+
+2025-09-30T03:52:53.860Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:52:53.866Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:52:53.887Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T03:58:13.446Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T03:58:14.037Z INFO  - latest Pulling from ocr-backend
+2025-09-30T03:58:14.050Z INFO  -  
+2025-09-30T03:58:14.051Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T03:58:14.058Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T03:58:14.058Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T03:58:14.304Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: f019736c-b200-436e-ad44-d23d22469d80\"}]}"}
+
+2025-09-30T03:58:14.306Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T03:58:14.310Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T03:58:14.321Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T04:03:04.412Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T04:03:05.128Z INFO  - latest Pulling from ocr-backend
+2025-09-30T04:03:05.146Z INFO  -  
+2025-09-30T04:03:05.147Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T04:03:05.154Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T04:03:05.155Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T04:03:05.453Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: 94e604f2-86e7-4bbc-9e24-7e743438923d\"}]}"}
+
+2025-09-30T04:03:05.454Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T04:03:05.463Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T04:03:05.466Z INFO  - Stopping site ocr-backend-app because it failed during startup.
+2025-09-30T04:08:36.545Z INFO  - Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-09-30T04:08:37.101Z INFO  - latest Pulling from ocr-backend
+2025-09-30T04:08:37.112Z INFO  -  
+2025-09-30T04:08:37.113Z ERROR - no matching manifest for linux/amd64 in the manifest list entriesErr: 0, Message: no matching manifest for linux/amd64 in the manifest list entries
+2025-09-30T04:08:37.122Z INFO  - Pull Image failed, Time taken: 0 Seconds
+2025-09-30T04:08:37.123Z ERROR - Pulling docker image assetmgmtsuiacr.azurecr.io/ocr-backend:latest failed:
+2025-09-30T04:08:37.381Z ERROR - DockerApiException: Docker API responded with status code=InternalServerError, response={"message":"Head \"https://assetmgmtsuiacr.azurecr.io/v2/ocr-backend/manifests/latest\": unauthorized: {\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required, visit https://aka.ms/acr/authorization for more information. CorrelationId: 5ed14617-ad9e-4702-bb8a-6940613ec83d\"}]}"}
+
+2025-09-30T04:08:37.382Z WARN  - Image pull failed. Defaulting to local copy if present.
+2025-09-30T04:08:37.388Z ERROR - Image pull failed: Verify docker image configuration and credentials (if using private repository)
+2025-09-30T04:08:37.405Z INFO  - Stopping site ocr-backend-app because it failed during startup.

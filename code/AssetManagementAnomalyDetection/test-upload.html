@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Upload Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .upload-form {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f9f9f9;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            display: none;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+        }
+        .success {
+            color: #2e7d32;
+            background: #e8f5e9;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 OCR Backend PDF Upload Test</h1>
+
+    <div class="upload-form">
+        <h2>Test Azure Endpoint</h2>
+        <p>URL: <strong>https://ocr-backend-app.azurewebsites.net/api/upload-pdf</strong></p>
+
+        <form id="uploadForm">
+            <input type="file" id="pdfFile" accept=".pdf" required>
+            <br>
+            <button type="submit">Upload & Process PDF</button>
+        </form>
+
+        <p class="loading" id="loading" style="display:none;">
+            ⏳ Processing PDF... This may take 30-60 seconds on first request (cold start)
+        </p>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('pdfFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a PDF file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const resultDiv = document.getElementById('result');
+            const loadingDiv = document.getElementById('loading');
+
+            loadingDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('https://ocr-backend-app.azurewebsites.net/api/upload-pdf', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                resultDiv.innerHTML = JSON.stringify(data, null, 2);
+                resultDiv.className = response.ok ? 'success' : 'error';
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                resultDiv.innerHTML = 'Error: ' + error.message + '\n\nNote: If this times out, the server may be cold starting. Try again in a minute.';
+                resultDiv.className = 'error';
+                resultDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

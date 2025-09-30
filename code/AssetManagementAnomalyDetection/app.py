@@ -130,6 +130,73 @@ def get_statement_raw():
         return jsonify({'error': str(e)}), 500
     return jsonify(rows)
 
+@app.route('/api/upload-pdf', methods=['POST'])
+def upload_pdf():
+	"""
+	Upload and process a PDF file to extract rental statement data.
+
+	Expects:
+		- multipart/form-data with 'file' field containing PDF
+
+	Returns:
+		JSON with extracted financial data, confidence scores, and method used
+	"""
+	# Check if file is present in request
+	if 'file' not in request.files:
+		return jsonify({
+			'success': False,
+			'error': 'No file provided',
+			'message': 'Please upload a PDF file using the "file" field'
+		}), 400
+
+	file = request.files['file']
+
+	# Check if filename is empty
+	if file.filename == '':
+		return jsonify({
+			'success': False,
+			'error': 'No file selected',
+			'message': 'Please select a PDF file to upload'
+		}), 400
+
+	# Check file extension
+	if not file.filename.lower().endswith('.pdf'):
+		return jsonify({
+			'success': False,
+			'error': 'Invalid file type',
+			'message': 'Only PDF files are supported'
+		}), 400
+
+	try:
+		# Lazy import to avoid dependency issues if OCR packages not installed
+		from ocr import process_pdf_from_bytes
+
+		# Read file bytes
+		pdf_bytes = file.read()
+
+		# Process PDF
+		result = process_pdf_from_bytes(pdf_bytes, file.filename)
+
+		# Return result with appropriate status code
+		if result.get('success'):
+			return jsonify(result), 200
+		else:
+			return jsonify(result), 500
+
+	except ImportError as e:
+		return jsonify({
+			'success': False,
+			'error': 'OCR dependencies not installed',
+			'message': 'Please install pdf2image, pytesseract, and Pillow. Also ensure Poppler and Tesseract are installed on the system.',
+			'details': str(e)
+		}), 500
+	except Exception as e:
+		return jsonify({
+			'success': False,
+			'error': 'Processing failed',
+			'message': str(e)
+		}), 500
+
 if __name__ == '__main__':
 	with app.app_context():
 		try:
