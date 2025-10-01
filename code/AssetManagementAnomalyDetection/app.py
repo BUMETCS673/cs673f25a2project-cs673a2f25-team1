@@ -123,9 +123,31 @@ def get_statement_raw():
     limit = max(1, min(limit, 100))
     rows = []
     try:
-        result = db.session.execute(text(f"SELECT TOP {limit} id, line FROM dbo.statement_raw ORDER BY id"))
+        # Select all columns with proper structure
+        result = db.session.execute(text(f"""
+            SELECT TOP {limit}
+                id, property_alias, date, period_start, period_end,
+                rent, management_fee, repair, deposit, misc,
+                note, total, payment_date
+            FROM dbo.statement_raw
+            ORDER BY id
+        """))
         for r in result:
-            rows.append({'id': int(r.id), 'line': str(r.line)})
+            rows.append({
+                'id': r.id,
+                'property_alias': r.property_alias,
+                'date': r.date,
+                'period_start': r.period_start,
+                'period_end': r.period_end,
+                'rent': r.rent,
+                'management_fee': r.management_fee,
+                'repair': r.repair,
+                'deposit': r.deposit,
+                'misc': r.misc,
+                'note': r.note,
+                'total': r.total,
+                'payment_date': r.payment_date
+            })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     return jsonify(rows)
