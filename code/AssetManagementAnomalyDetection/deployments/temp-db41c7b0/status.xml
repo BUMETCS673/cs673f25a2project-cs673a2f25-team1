@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<deployment>
+  <id>temp-db41c7b0</id>
+  <author>N/A</author>
+  <deployer>GitHub</deployer>
+  <authorEmail>N/A</authorEmail>
+  <message>Fetch from https://github.com/BUMETCS673/cs673f25a2project-cs673a2f25-team1</message>
+  <progress></progress>
+  <status>Failed</status>
+  <statusText>Deployment has been stopped due to SCM container restart. The restart can happen due to a management operation on site. Do not perform a management operation and a deployment operation in quick succession. Adding a small delay can help avoid any conflicts.</statusText>
+  <lastSuccessEndTime />
+  <receivedTime>2025-10-01T15:24:38.4828914Z</receivedTime>
+  <startTime>2025-10-01T15:24:38.4828914Z</startTime>
+  <endTime>2025-10-01T15:26:36.8385493Z</endTime>
+  <complete>True</complete>
+  <is_temp>True</is_temp>
+  <is_readonly>False</is_readonly>
+  <buildSummary />
+</deployment>

@@ -1,0 +1,69 @@
+2025-10-01T15:19:50.8329376Z,Updating submodules.,1753b3ee-7e34-4c87-afe5-e2e45e3b5438,0
+2025-10-01T15:19:52.1942530Z,Preparing deployment for commit id 'a9e5a5d9-4'.,42b02d86-d971-4558-8c07-18a2061612b2,0
+2025-10-01T15:19:52.9334766Z,PreDeployment: context.CleanOutputPath False,b3ed7916-4e87-4ee4-8aba-c028c57ad5bd,0
+2025-10-01T15:19:53.2245377Z,PreDeployment: context.OutputPath /home/site/wwwroot,ec3d5502-3859-4976-817b-ef5b69ce2ed6,0
+2025-10-01T15:19:53.4993941Z,Repository path is /tmp/zipdeploy/extracted,6b5d07d1-5f9b-4dbd-b33a-1e99dffce3b8,0
+2025-10-01T15:19:53.7668717Z,Oryx-Build: Running kudu sync...,266f7aa3-6b35-4c08-9d2f-7a7be32b6cb7,0
+	2025-10-01T15:19:53.8191403Z,Command: kudusync -v 50 -f /tmp/zipdeploy/extracted -t /home/site/wwwroot -n /home/site/deployments/a9e5a5d9-4697-4a6e-9cf7-645bd6e667fe/manifest -p /home/site/deployments/d5988dc0-bab1-494b-a103-a92c4b404475/manifest -i ".git;.hg;.deployment;.deploy.sh",,0
+	2025-10-01T15:19:55.4225861Z,Kudu sync from: '/tmp/zipdeploy/extracted' to: '/home/site/wwwroot',,0
+	2025-10-01T15:19:55.6716360Z,Ignoring: .deployment,,0
+	2025-10-01T15:19:55.8379268Z,Copying file: '.dockerignore',,0
+	2025-10-01T15:19:56.0167400Z,Copying file: 'AZURE_DEPLOYMENT.md',,0
+	2025-10-01T15:19:56.2212715Z,Copying file: 'Balanced_Portfolio_Anamoly_Result.jpg',,0
+	2025-10-01T15:19:56.3556618Z,Copying file: 'DOCKER_TEST_RESULTS.md',,0
+	2025-10-01T15:19:56.5635474Z,Copying file: 'Dockerfile',,0
+	2025-10-01T15:19:56.8964308Z,Copying file: 'FULL_TEST_RESULTS.md',,0
+	2025-10-01T15:19:57.0391176Z,Copying file: 'README.md',,0
+	2025-10-01T15:19:57.2249987Z,Copying file: 'Tech_Growth_Fund_Anamoly_Result.jpg',,0
+	2025-10-01T15:19:57.3665115Z,Copying file: 'app.py',,0
+	2025-10-01T15:19:57.4782574Z,Copying file: 'backend.log',,0
+	2025-10-01T15:19:57.6441801Z,Copying file: 'db.py',,0
+	2025-10-01T15:19:57.6821366Z,Copying file: 'db_init.sql',,0
+	2025-10-01T15:19:57.7154341Z,Copying file: 'deployment.zip',,0
+	2025-10-01T15:19:57.7538477Z,Copying file: 'export_local_to_sqlserver_sql.py',,0
+	2025-10-01T15:19:59.8734118Z,Copying file: 'models.py',,0
+	2025-10-01T15:19:59.9530852Z,Copying file: 'ocr-logs.zip',,0
+	2025-10-01T15:19:59.9838869Z,Copying file: 'requirements.txt',,0
+	2025-10-01T15:20:00.0623740Z,Copying file: 'run_tests.sh',,0
+	2025-10-01T15:20:00.2427011Z,Copying file: 'sample_data.py',,0
+	2025-10-01T15:20:00.2974551Z,Copying file: 'startup.sh',,0
+	2025-10-01T15:20:00.3453809Z,Copying file: 'sync_to_azure.py',,0
+	2025-10-01T15:20:00.4292968Z,Copying file: 'test-upload.html',,0
+	2025-10-01T15:20:00.4963006Z,Copying file: 'web.config',,0
+	2025-10-01T15:20:00.5641516Z,Deleting file: 'AssetManagementAnomalyDetection/.deployment',,0
+	2025-10-01T15:20:00.6211858Z,Deleting file: 'AssetManagementAnomalyDetection/.dockerignore',,0
+	2025-10-01T15:20:00.6699494Z,Deleting file: 'AssetManagementAnomalyDetection/AZURE_DEPLOYMENT.md',,0
+	2025-10-01T15:20:00.7348825Z,Deleting file: 'AssetManagementAnomalyDetection/Balanced_Portfolio_Anamoly_Result.jpg',,0
+	2025-10-01T15:20:00.7922496Z,Deleting file: 'AssetManagementAnomalyDetection/DOCKER_TEST_RESULTS.md',,0
+	2025-10-01T15:20:00.8544743Z,Deleting file: 'AssetManagementAnomalyDetection/Dockerfile',,0
+	2025-10-01T15:20:00.9211735Z,Deleting file: 'AssetManagementAnomalyDetection/FULL_TEST_RESULTS.md',,0
+	2025-10-01T15:20:00.9760380Z,Deleting file: 'AssetManagementAnomalyDetection/README.md',,0
+	2025-10-01T15:20:01.0003541Z,Deleting file: 'AssetManagementAnomalyDetection/Tech_Growth_Fund_Anamoly_Result.jpg',,0
+	2025-10-01T15:20:01.0375314Z,Deleting file: 'AssetManagementAnomalyDetection/app.py',,0
+	2025-10-01T15:20:01.0756961Z,Deleting file: 'AssetManagementAnomalyDetection/backend.log',,0
+	2025-10-01T15:20:01.1056358Z,Deleting file: 'AssetManagementAnomalyDetection/db.py',,0
+	2025-10-01T15:20:01.1535641Z,Deleting file: 'AssetManagementAnomalyDetection/db_init.sql',,0
+	2025-10-01T15:20:01.2032950Z,Deleting file: 'AssetManagementAnomalyDetection/deployment.zip',,0
+	2025-10-01T15:20:01.3175401Z,Deleting file: 'AssetManagementAnomalyDetection/export_local_to_sqlserver_sql.py',,0
+	2025-10-01T15:20:01.4330881Z,Deleting file: 'AssetManagementAnomalyDetection/models.py',,0
+	2025-10-01T15:20:01.4837801Z,Deleting file: 'AssetManagementAnomalyDetection/ocr-logs.zip',,0
+	2025-10-01T15:20:01.5321039Z,Deleting file: 'AssetManagementAnomalyDetection/requirements.txt',,0
+	2025-10-01T15:20:01.5616498Z,Deleting file: 'AssetManagementAnomalyDetection/run_tests.sh',,0
+	2025-10-01T15:20:01.6009598Z,Deleting file: 'AssetManagementAnomalyDetection/sample_data.py',,0
+	2025-10-01T15:20:01.6378419Z,Deleting file: 'AssetManagementAnomalyDetection/startup.sh',,0
+	2025-10-01T15:20:01.6686396Z,Deleting file: 'AssetManagementAnomalyDetection/sync_to_azure.py',,0
+	2025-10-01T15:20:01.7045018Z,Deleting file: 'AssetManagementAnomalyDetection/test-upload.html',,0
+	2025-10-01T15:20:01.7352099Z,Deleting file: 'AssetManagementAnomalyDetection/web.config',,0
+	2025-10-01T15:20:01.7734813Z,Deleting file: 'AssetManagementAnomalyDetection/.venv_azure/.gitignore',,0
+	2025-10-01T15:20:01.8775107Z,Omitting next output lines...,,0
+	2025-10-01T15:20:20.8180940Z,Processed 1755 files...,,0
+	2025-10-01T15:20:40.8495577Z,Processed 2119 files...,,0
+	2025-10-01T15:21:00.9400727Z,Processed 2529 files...,,0
+	2025-10-01T15:21:21.0898920Z,Processed 2938 files...,,0
+2025-10-01T15:21:22.0683076Z,Running post deployment command(s)...,89bba5fd-3be8-4f5b-a3d4-4058d2d79d49,0
+2025-10-01T15:21:22.2155295Z,,97dbb469-36b3-46fe-98bc-90f170a965cc,0
+2025-10-01T15:21:22.3358235Z,Generating summary of Oryx build,eab1c288-ccfb-438a-b78a-66713d20cf34,0
+2025-10-01T15:21:22.4644125Z,Deployment Log file does not exist in /tmp/oryx-build.log,12e141a5-9216-4543-bcd9-39f6377176de,0
+2025-10-01T15:21:22.5991427Z,The logfile at /tmp/oryx-build.log is empty. Unable to fetch the summary of build,5b50bebd-d71a-47a9-848c-4aa41abfd1dc,0
+2025-10-01T15:21:22.7352989Z,Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path,bfc0d553-6a94-4ab9-a16a-a6f9986d77ba,0
+2025-10-01T15:21:22.9003569Z,Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy,d8cf491e-2de4-4c28-887d-fddbe3e82db2,0

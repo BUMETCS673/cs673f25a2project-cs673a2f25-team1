@@ -1,0 +1,303 @@
+2025-10-01T14:56:51.0792199Z Site: ocr-backend-app stopped.
+2025-10-01T14:57:13.2849764Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T14:57:13.3889943Z Stop and delete container. Retry count = 0
+2025-10-01T14:57:13.3894517Z Stopping container: 2a287dadac52_ocr-backend-app.
+2025-10-01T14:57:18.9652754Z Deleting container: 2a287dadac52_ocr-backend-app. Retry count = 0
+2025-10-01T14:57:20.0075391Z Container spec TerminationMessagePolicy  path 
+2025-10-01T14:57:20.0083042Z Container is terminated. Total time elapsed: 6722 ms.
+2025-10-01T14:57:20.0155361Z Site: ocr-backend-app stopped.
+2025-10-01T14:58:01.8762196Z Container start method called.
+2025-10-01T14:58:01.8779076Z Establishing network.
+2025-10-01T14:58:01.8861252Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T14:58:03.7711568Z Container is starting.
+2025-10-01T14:58:03.7721439Z Establishing user namespace if not established already.
+2025-10-01T14:58:03.7785934Z Establishing network if not established already.
+2025-10-01T14:58:03.7791755Z Mounting volumes.
+2025-10-01T14:58:03.7967646Z Nested mountpoint volatile/logs
+2025-10-01T14:58:03.8196493Z Nested mountpoint 
+2025-10-01T14:58:04.0520748Z Creating container.
+2025-10-01T14:58:04.0760737Z Creating pipes for streaming container io.
+2025-10-01T14:58:04.0775541Z Creating stdout named pipe at /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stdout_0d8d66d9473e4062a23574ed942d8675.
+2025-10-01T14:58:04.0791663Z Successfully created stdout named pipe at: /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stdout_0d8d66d9473e4062a23574ed942d8675.
+2025-10-01T14:58:04.0862029Z Opening named pipe /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stdout_0d8d66d9473e4062a23574ed942d8675 for reading in non-blocking mode.
+2025-10-01T14:58:04.1016460Z Successfully opened named pipe: /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stdout_0d8d66d9473e4062a23574ed942d8675.
+2025-10-01T14:58:04.1021158Z Successfully removed non-blocking flag from /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stdout_0d8d66d9473e4062a23574ed942d8675.
+2025-10-01T14:58:04.1026426Z Creating stderr named pipe at /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stderr_9c15dc825f21473280d3488ec7c16b90.
+2025-10-01T14:58:04.1180036Z Successfully created stderr named pipe at: /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stderr_9c15dc825f21473280d3488ec7c16b90.
+2025-10-01T14:58:04.1195908Z Opening named pipe /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stderr_9c15dc825f21473280d3488ec7c16b90 for reading in non-blocking mode.
+2025-10-01T14:58:04.1202786Z Successfully opened named pipe: /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stderr_9c15dc825f21473280d3488ec7c16b90.
+2025-10-01T14:58:04.1264813Z Successfully removed non-blocking flag from /podr/container/pipe/0c3fdfaeb539_ocr-backend-app/stderr_9c15dc825f21473280d3488ec7c16b90.
+2025-10-01T14:58:04.1268091Z Creating container with image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest from registry: assetmgmtsuiacr.azurecr.io and fully qualified image name: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-10-01T14:58:05.6537047Z Starting container: 0c3fdfaeb539_ocr-backend-app.
+2025-10-01T14:58:05.7669520Z Starting watchers and probes.
+2025-10-01T14:58:05.8155115Z Starting metrics collection.
+2025-10-01T14:58:05.8630838Z Container is running.
+2025-10-01T14:58:06.6772919Z Container start method finished after 4791 ms.
+2025-10-01T14:58:11.4952287Z Site startup probe succeeded after 4.7757149 seconds.
+2025-10-01T14:58:11.5795021Z Site started.
+2025-10-01T15:16:44.5661395Z Container start method called.
+2025-10-01T15:16:44.5777693Z Establishing network.
+2025-10-01T15:16:44.5779366Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:16:46.3489093Z Container is starting.
+2025-10-01T15:16:46.3740609Z Establishing user namespace if not established already.
+2025-10-01T15:16:46.3741902Z Establishing network if not established already.
+2025-10-01T15:16:46.3744349Z Mounting volumes.
+2025-10-01T15:16:46.3746855Z Nested mountpoint volatile/logs
+2025-10-01T15:16:46.4730490Z Nested mountpoint 
+2025-10-01T15:16:46.6570719Z Creating container.
+2025-10-01T15:16:46.6572527Z Creating pipes for streaming container io.
+2025-10-01T15:16:46.6581348Z Creating stdout named pipe at /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stdout_8429618778b04cf1827a4b20b93df1a0.
+2025-10-01T15:16:46.6771851Z Successfully created stdout named pipe at: /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stdout_8429618778b04cf1827a4b20b93df1a0.
+2025-10-01T15:16:46.6776727Z Opening named pipe /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stdout_8429618778b04cf1827a4b20b93df1a0 for reading in non-blocking mode.
+2025-10-01T15:16:46.6878472Z Successfully opened named pipe: /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stdout_8429618778b04cf1827a4b20b93df1a0.
+2025-10-01T15:16:46.6981110Z Successfully removed non-blocking flag from /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stdout_8429618778b04cf1827a4b20b93df1a0.
+2025-10-01T15:16:46.6988129Z Creating stderr named pipe at /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stderr_b6ee1977461f452b8e22e01d84520048.
+2025-10-01T15:16:46.6998438Z Successfully created stderr named pipe at: /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stderr_b6ee1977461f452b8e22e01d84520048.
+2025-10-01T15:16:46.7253464Z Opening named pipe /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stderr_b6ee1977461f452b8e22e01d84520048 for reading in non-blocking mode.
+2025-10-01T15:16:46.7329580Z Successfully opened named pipe: /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stderr_b6ee1977461f452b8e22e01d84520048.
+2025-10-01T15:16:46.7332453Z Successfully removed non-blocking flag from /podr/container/pipe/88ff35f1f1e5_ocr-backend-app/stderr_b6ee1977461f452b8e22e01d84520048.
+2025-10-01T15:16:46.7431765Z Creating container with image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest from registry: assetmgmtsuiacr.azurecr.io and fully qualified image name: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-10-01T15:16:47.9173769Z Starting container: 88ff35f1f1e5_ocr-backend-app.
+2025-10-01T15:16:48.0676788Z Starting watchers and probes.
+2025-10-01T15:16:48.0708308Z Starting metrics collection.
+2025-10-01T15:16:48.0709706Z Container is running.
+2025-10-01T15:16:48.2698979Z Container start method finished after 3696 ms.
+2025-10-01T15:16:54.2272538Z Site startup probe succeeded after 5.8746342 seconds.
+2025-10-01T15:16:54.3057262Z Site is running with deployment version: d5988dc0-bab1-494b-a103-a92c4b404475
+2025-10-01T15:16:54.3077278Z Site started.
+2025-10-01T15:17:14.4853620Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:17:14.6699804Z Stop and delete container. Retry count = 0
+2025-10-01T15:17:14.6973525Z Stopping container: 0c3fdfaeb539_ocr-backend-app.
+2025-10-01T15:17:20.0438937Z Deleting container: 0c3fdfaeb539_ocr-backend-app. Retry count = 0
+2025-10-01T15:17:20.9315360Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:17:20.9594326Z Container is terminated. Total time elapsed: 6462 ms.
+2025-10-01T15:17:20.9678266Z Site: ocr-backend-app stopped.
+2025-10-01T15:21:26.1452895Z Container start method called.
+2025-10-01T15:21:26.1631094Z Establishing network.
+2025-10-01T15:21:26.1632900Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:21:27.7157137Z Container is starting.
+2025-10-01T15:21:27.7158647Z Establishing user namespace if not established already.
+2025-10-01T15:21:27.7159818Z Establishing network if not established already.
+2025-10-01T15:21:27.7160888Z Mounting volumes.
+2025-10-01T15:21:27.7162583Z Nested mountpoint volatile/logs
+2025-10-01T15:21:27.7356044Z Nested mountpoint 
+2025-10-01T15:21:27.9302495Z Creating container.
+2025-10-01T15:21:27.9496336Z Creating pipes for streaming container io.
+2025-10-01T15:21:27.9850351Z Creating stdout named pipe at /podr/container/pipe/d42b4f90e610_ocr-backend-app/stdout_3bf4c9ad30af4768bced2fc2814652f0.
+2025-10-01T15:21:27.9972542Z Successfully created stdout named pipe at: /podr/container/pipe/d42b4f90e610_ocr-backend-app/stdout_3bf4c9ad30af4768bced2fc2814652f0.
+2025-10-01T15:21:28.0260949Z Opening named pipe /podr/container/pipe/d42b4f90e610_ocr-backend-app/stdout_3bf4c9ad30af4768bced2fc2814652f0 for reading in non-blocking mode.
+2025-10-01T15:21:28.0268292Z Successfully opened named pipe: /podr/container/pipe/d42b4f90e610_ocr-backend-app/stdout_3bf4c9ad30af4768bced2fc2814652f0.
+2025-10-01T15:21:28.0337837Z Successfully removed non-blocking flag from /podr/container/pipe/d42b4f90e610_ocr-backend-app/stdout_3bf4c9ad30af4768bced2fc2814652f0.
+2025-10-01T15:21:28.0345885Z Creating stderr named pipe at /podr/container/pipe/d42b4f90e610_ocr-backend-app/stderr_8d4537d44d214804b75bdb737f90bbdb.
+2025-10-01T15:21:28.0714895Z Successfully created stderr named pipe at: /podr/container/pipe/d42b4f90e610_ocr-backend-app/stderr_8d4537d44d214804b75bdb737f90bbdb.
+2025-10-01T15:21:28.0717640Z Opening named pipe /podr/container/pipe/d42b4f90e610_ocr-backend-app/stderr_8d4537d44d214804b75bdb737f90bbdb for reading in non-blocking mode.
+2025-10-01T15:21:28.0720812Z Successfully opened named pipe: /podr/container/pipe/d42b4f90e610_ocr-backend-app/stderr_8d4537d44d214804b75bdb737f90bbdb.
+2025-10-01T15:21:28.0725985Z Successfully removed non-blocking flag from /podr/container/pipe/d42b4f90e610_ocr-backend-app/stderr_8d4537d44d214804b75bdb737f90bbdb.
+2025-10-01T15:21:28.0727840Z Creating container with image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest from registry: assetmgmtsuiacr.azurecr.io and fully qualified image name: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-10-01T15:21:28.9979544Z Starting container: d42b4f90e610_ocr-backend-app.
+2025-10-01T15:21:29.1054462Z Starting watchers and probes.
+2025-10-01T15:21:29.1164823Z Starting metrics collection.
+2025-10-01T15:21:29.1232964Z Container is running.
+2025-10-01T15:21:29.2837798Z Container start method finished after 3120 ms.
+2025-10-01T15:21:40.6967004Z Site startup probe succeeded after 11.3067983 seconds.
+2025-10-01T15:21:40.7777264Z Site is running with deployment version: a9e5a5d9-4697-4a6e-9cf7-645bd6e667fe
+2025-10-01T15:21:40.7789616Z Site started.
+2025-10-01T15:22:00.9362232Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:22:01.0901424Z Stop and delete container. Retry count = 0
+2025-10-01T15:22:01.0905934Z Stopping container: 88ff35f1f1e5_ocr-backend-app.
+2025-10-01T15:22:08.0816032Z Deleting container: 88ff35f1f1e5_ocr-backend-app. Retry count = 0
+2025-10-01T15:22:09.2910279Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:22:09.3043566Z Container is terminated. Total time elapsed: 8351 ms.
+2025-10-01T15:22:09.3067408Z Site: ocr-backend-app stopped.
+2025-10-01T15:22:13.5809950Z Container start method called.
+2025-10-01T15:22:13.6467118Z Establishing network.
+2025-10-01T15:22:13.6476910Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:22:14.8143153Z Container is starting.
+2025-10-01T15:22:14.8155869Z Establishing user namespace if not established already.
+2025-10-01T15:22:14.8158269Z Establishing network if not established already.
+2025-10-01T15:22:14.8159431Z Mounting volumes.
+2025-10-01T15:22:14.8161869Z Nested mountpoint volatile/logs
+2025-10-01T15:22:14.8525169Z Nested mountpoint 
+2025-10-01T15:22:15.1240251Z Creating container.
+2025-10-01T15:22:15.1248370Z Creating pipes for streaming container io.
+2025-10-01T15:22:15.1251249Z Creating stdout named pipe at /podr/container/pipe/4360f87c5939_ocr-backend-app/stdout_d0cbc307744f4249b0bb89ef92a5009f.
+2025-10-01T15:22:15.1341279Z Successfully created stdout named pipe at: /podr/container/pipe/4360f87c5939_ocr-backend-app/stdout_d0cbc307744f4249b0bb89ef92a5009f.
+2025-10-01T15:22:15.1346212Z Opening named pipe /podr/container/pipe/4360f87c5939_ocr-backend-app/stdout_d0cbc307744f4249b0bb89ef92a5009f for reading in non-blocking mode.
+2025-10-01T15:22:15.1348704Z Successfully opened named pipe: /podr/container/pipe/4360f87c5939_ocr-backend-app/stdout_d0cbc307744f4249b0bb89ef92a5009f.
+2025-10-01T15:22:15.1350619Z Successfully removed non-blocking flag from /podr/container/pipe/4360f87c5939_ocr-backend-app/stdout_d0cbc307744f4249b0bb89ef92a5009f.
+2025-10-01T15:22:15.1437562Z Creating stderr named pipe at /podr/container/pipe/4360f87c5939_ocr-backend-app/stderr_f19155d2f3874dd28177f80079370328.
+2025-10-01T15:22:15.1443667Z Successfully created stderr named pipe at: /podr/container/pipe/4360f87c5939_ocr-backend-app/stderr_f19155d2f3874dd28177f80079370328.
+2025-10-01T15:22:15.1451897Z Opening named pipe /podr/container/pipe/4360f87c5939_ocr-backend-app/stderr_f19155d2f3874dd28177f80079370328 for reading in non-blocking mode.
+2025-10-01T15:22:15.1457450Z Successfully opened named pipe: /podr/container/pipe/4360f87c5939_ocr-backend-app/stderr_f19155d2f3874dd28177f80079370328.
+2025-10-01T15:22:15.1806423Z Successfully removed non-blocking flag from /podr/container/pipe/4360f87c5939_ocr-backend-app/stderr_f19155d2f3874dd28177f80079370328.
+2025-10-01T15:22:15.1808889Z Creating container with image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest from registry: assetmgmtsuiacr.azurecr.io and fully qualified image name: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-10-01T15:22:17.2019022Z Starting container: 4360f87c5939_ocr-backend-app.
+2025-10-01T15:22:17.3660588Z Starting watchers and probes.
+2025-10-01T15:22:17.3674690Z Starting metrics collection.
+2025-10-01T15:22:17.3839178Z Container is running.
+2025-10-01T15:22:17.6429625Z Container start method finished after 3986 ms.
+2025-10-01T15:22:33.7456391Z Site startup probe succeeded after 16.083041 seconds.
+2025-10-01T15:22:34.0679797Z Site is running with deployment version: a9e5a5d9-4697-4a6e-9cf7-645bd6e667fe
+2025-10-01T15:22:34.0878722Z Site started.
+2025-10-01T15:22:54.7869372Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:22:54.7969917Z Stop and delete container. Retry count = 0
+2025-10-01T15:22:54.7978842Z Stopping container: d42b4f90e610_ocr-backend-app.
+2025-10-01T15:22:56.2897561Z Deleting container: d42b4f90e610_ocr-backend-app. Retry count = 0
+2025-10-01T15:22:56.7143935Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:22:56.7207796Z Container is terminated. Total time elapsed: 1927 ms.
+2025-10-01T15:22:56.7208524Z Site: ocr-backend-app stopped.
+2025-10-01T15:23:48.1637495Z Container start method called.
+2025-10-01T15:23:48.1638908Z Establishing network.
+2025-10-01T15:23:48.1640045Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:23:52.6062447Z Container is starting.
+2025-10-01T15:23:52.6157664Z Establishing user namespace if not established already.
+2025-10-01T15:23:52.6166611Z Establishing network if not established already.
+2025-10-01T15:23:52.6268962Z Mounting volumes.
+2025-10-01T15:23:52.6466369Z Nested mountpoint volatile/logs
+2025-10-01T15:23:53.0046561Z Nested mountpoint 
+2025-10-01T15:23:53.7894851Z Creating container.
+2025-10-01T15:23:53.7980227Z Creating pipes for streaming container io.
+2025-10-01T15:23:53.7989342Z Creating stdout named pipe at /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stdout_6e440598244f48658c556299a4fd2b54.
+2025-10-01T15:23:53.8842368Z Successfully created stdout named pipe at: /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stdout_6e440598244f48658c556299a4fd2b54.
+2025-10-01T15:23:53.8850239Z Opening named pipe /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stdout_6e440598244f48658c556299a4fd2b54 for reading in non-blocking mode.
+2025-10-01T15:23:53.8933211Z Successfully opened named pipe: /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stdout_6e440598244f48658c556299a4fd2b54.
+2025-10-01T15:23:54.0187480Z Successfully removed non-blocking flag from /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stdout_6e440598244f48658c556299a4fd2b54.
+2025-10-01T15:23:54.0196106Z Creating stderr named pipe at /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stderr_b29bc66c407849fd8a70023c3a407181.
+2025-10-01T15:23:54.0198671Z Successfully created stderr named pipe at: /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stderr_b29bc66c407849fd8a70023c3a407181.
+2025-10-01T15:23:54.0200151Z Opening named pipe /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stderr_b29bc66c407849fd8a70023c3a407181 for reading in non-blocking mode.
+2025-10-01T15:23:54.0201507Z Successfully opened named pipe: /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stderr_b29bc66c407849fd8a70023c3a407181.
+2025-10-01T15:23:54.0202501Z Successfully removed non-blocking flag from /podr/container/pipe/ac77f8074f4d_ocr-backend-app/stderr_b29bc66c407849fd8a70023c3a407181.
+2025-10-01T15:23:54.0203719Z Creating container with image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest from registry: assetmgmtsuiacr.azurecr.io and fully qualified image name: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-10-01T15:23:56.5461486Z Starting container: ac77f8074f4d_ocr-backend-app.
+2025-10-01T15:23:56.7207658Z Starting watchers and probes.
+2025-10-01T15:23:56.7282373Z Starting metrics collection.
+2025-10-01T15:23:56.7285437Z Container is running.
+2025-10-01T15:23:56.9203376Z Container start method finished after 8756 ms.
+2025-10-01T15:24:12.5332349Z Site startup probe succeeded after 15.6023737 seconds.
+2025-10-01T15:24:12.7261190Z Site is running with deployment version: a9e5a5d9-4697-4a6e-9cf7-645bd6e667fe
+2025-10-01T15:24:12.7433517Z Site started.
+2025-10-01T15:24:33.2751261Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:24:33.2867739Z Stop and delete container. Retry count = 0
+2025-10-01T15:24:33.2930184Z Stopping container: 4360f87c5939_ocr-backend-app.
+2025-10-01T15:24:37.2586511Z Deleting container: 4360f87c5939_ocr-backend-app. Retry count = 0
+2025-10-01T15:24:39.2608986Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:24:39.2610863Z Container is terminated. Total time elapsed: 5985 ms.
+2025-10-01T15:24:39.2611348Z Site: ocr-backend-app stopped.
+2025-10-01T15:25:52.4162906Z Container start method called.
+2025-10-01T15:25:52.4349285Z Establishing network.
+2025-10-01T15:25:52.4352921Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:25:56.8376122Z Container is starting.
+2025-10-01T15:25:56.8662621Z Establishing user namespace if not established already.
+2025-10-01T15:25:56.8676213Z Establishing network if not established already.
+2025-10-01T15:25:56.8759692Z Mounting volumes.
+2025-10-01T15:25:56.8864743Z Nested mountpoint volatile/logs
+2025-10-01T15:25:56.9410062Z Nested mountpoint 
+2025-10-01T15:25:57.2169293Z Creating container.
+2025-10-01T15:25:57.2254198Z Creating pipes for streaming container io.
+2025-10-01T15:25:57.2255670Z Creating stdout named pipe at /podr/container/pipe/2f870a10e40b_ocr-backend-app/stdout_0a2847db44ac44508cd5ddd4941abe02.
+2025-10-01T15:25:57.2258424Z Successfully created stdout named pipe at: /podr/container/pipe/2f870a10e40b_ocr-backend-app/stdout_0a2847db44ac44508cd5ddd4941abe02.
+2025-10-01T15:25:57.2259288Z Opening named pipe /podr/container/pipe/2f870a10e40b_ocr-backend-app/stdout_0a2847db44ac44508cd5ddd4941abe02 for reading in non-blocking mode.
+2025-10-01T15:25:57.2260457Z Successfully opened named pipe: /podr/container/pipe/2f870a10e40b_ocr-backend-app/stdout_0a2847db44ac44508cd5ddd4941abe02.
+2025-10-01T15:25:57.2261337Z Successfully removed non-blocking flag from /podr/container/pipe/2f870a10e40b_ocr-backend-app/stdout_0a2847db44ac44508cd5ddd4941abe02.
+2025-10-01T15:25:57.2262221Z Creating stderr named pipe at /podr/container/pipe/2f870a10e40b_ocr-backend-app/stderr_2c61a91e988945e3921090d57c536a9e.
+2025-10-01T15:25:57.2535293Z Successfully created stderr named pipe at: /podr/container/pipe/2f870a10e40b_ocr-backend-app/stderr_2c61a91e988945e3921090d57c536a9e.
+2025-10-01T15:25:57.3294158Z Opening named pipe /podr/container/pipe/2f870a10e40b_ocr-backend-app/stderr_2c61a91e988945e3921090d57c536a9e for reading in non-blocking mode.
+2025-10-01T15:25:57.3296789Z Successfully opened named pipe: /podr/container/pipe/2f870a10e40b_ocr-backend-app/stderr_2c61a91e988945e3921090d57c536a9e.
+2025-10-01T15:25:57.3297870Z Successfully removed non-blocking flag from /podr/container/pipe/2f870a10e40b_ocr-backend-app/stderr_2c61a91e988945e3921090d57c536a9e.
+2025-10-01T15:25:57.3398293Z Creating container with image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest from registry: assetmgmtsuiacr.azurecr.io and fully qualified image name: assetmgmtsuiacr.azurecr.io/ocr-backend:latest
+2025-10-01T15:25:59.7300376Z Starting container: 2f870a10e40b_ocr-backend-app.
+2025-10-01T15:26:00.2787550Z Starting watchers and probes.
+2025-10-01T15:26:00.2790735Z Starting metrics collection.
+2025-10-01T15:26:00.2792151Z Container is running.
+2025-10-01T15:26:00.5574067Z Container start method finished after 8140 ms.
+2025-10-01T15:26:18.3923397Z Site startup probe succeeded after 17.7286325 seconds.
+2025-10-01T15:26:18.6308678Z Site is running with deployment version: a9e5a5d9-4697-4a6e-9cf7-645bd6e667fe
+2025-10-01T15:26:18.6316040Z Site started.
+2025-10-01T15:26:38.8365834Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:26:38.8660208Z Stop and delete container. Retry count = 0
+2025-10-01T15:26:38.8677874Z Stopping container: ac77f8074f4d_ocr-backend-app.
+2025-10-01T15:26:44.1341768Z Deleting container: ac77f8074f4d_ocr-backend-app. Retry count = 0
+2025-10-01T15:26:45.2474206Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:26:45.2665443Z Container is terminated. Total time elapsed: 6408 ms.
+2025-10-01T15:26:45.2666028Z Site: ocr-backend-app stopped.
+2025-10-01T15:29:26.7244328Z Container start method called.
+2025-10-01T15:29:26.7253621Z Establishing network.
+2025-10-01T15:29:26.7344570Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:29:52.2419449Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-10-01T15:29:52.2499144Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:29:52.2778217Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:29:52.2877631Z Container is terminated. Total time elapsed: 26 ms.
+2025-10-01T15:29:52.3050504Z Site container: ocr-backend-app terminated during site startup.
+2025-10-01T15:29:52.3756890Z Failed to start site. Revert by stopping site.
+2025-10-01T15:29:52.4100923Z Site: ocr-backend-app stopped.
+2025-10-01T15:30:13.7100003Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:30:13.7278238Z Stop and delete container. Retry count = 0
+2025-10-01T15:30:13.7297227Z Stopping container: 2f870a10e40b_ocr-backend-app.
+2025-10-01T15:30:15.1499287Z Deleting container: 2f870a10e40b_ocr-backend-app. Retry count = 0
+2025-10-01T15:30:16.5803336Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:30:16.5810968Z Container is terminated. Total time elapsed: 2863 ms.
+2025-10-01T15:30:16.5811505Z Site: ocr-backend-app stopped.
+2025-10-01T15:30:20.0268493Z Container start method called.
+2025-10-01T15:30:20.0269845Z Establishing network.
+2025-10-01T15:30:20.0270923Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:30:26.6267401Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-10-01T15:30:26.6348613Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:30:26.6350426Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:30:26.6365711Z Container is terminated. Total time elapsed: 1 ms.
+2025-10-01T15:30:26.6367226Z Site container: ocr-backend-app terminated during site startup.
+2025-10-01T15:30:26.6648394Z Failed to start site. Revert by stopping site.
+2025-10-01T15:30:26.6812619Z Site: ocr-backend-app stopped.
+2025-10-01T15:30:27.6127498Z Site: ocr-backend-app will be blocked for 1 minutes till 10/01/2025 15:31:27
+2025-10-01T15:30:35.3126896Z Start site prohibitted because the site is being blocked.
+2025-10-01T15:30:49.9717054Z Start site prohibitted because the site is being blocked.
+2025-10-01T15:31:27.6152595Z Site: ocr-backend-app is unblocked.
+2025-10-01T15:31:48.0185106Z Container start method called.
+2025-10-01T15:31:48.0186838Z Establishing network.
+2025-10-01T15:31:48.0208816Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:31:52.1743690Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-10-01T15:31:52.1777674Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:31:52.1849565Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:31:52.1852187Z Container is terminated. Total time elapsed: 1 ms.
+2025-10-01T15:31:52.1866410Z Site container: ocr-backend-app terminated during site startup.
+2025-10-01T15:31:52.2139286Z Failed to start site. Revert by stopping site.
+2025-10-01T15:31:52.2225716Z Site: ocr-backend-app stopped.
+2025-10-01T15:34:33.8285610Z Container start method called.
+2025-10-01T15:34:33.8379564Z Establishing network.
+2025-10-01T15:34:33.8667303Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:34:41.5698753Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-10-01T15:34:41.5779661Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:34:41.5798753Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:34:41.5875464Z Container is terminated. Total time elapsed: 7 ms.
+2025-10-01T15:34:41.5962224Z Site container: ocr-backend-app terminated during site startup.
+2025-10-01T15:34:41.6159994Z Failed to start site. Revert by stopping site.
+2025-10-01T15:34:41.6266001Z Site: ocr-backend-app stopped.
+2025-10-01T15:36:49.5944547Z Container start method called.
+2025-10-01T15:36:49.5953889Z Establishing network.
+2025-10-01T15:36:49.5961169Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:36:54.9001001Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-10-01T15:36:54.9011416Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:36:54.9020275Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:36:54.9027868Z Container is terminated. Total time elapsed: 0 ms.
+2025-10-01T15:36:54.9100103Z Site container: ocr-backend-app terminated during site startup.
+2025-10-01T15:36:54.9309385Z Failed to start site. Revert by stopping site.
+2025-10-01T15:36:54.9395805Z Site: ocr-backend-app stopped.
+2025-10-01T15:40:35.2981028Z Container start method called.
+2025-10-01T15:40:35.2986394Z Establishing network.
+2025-10-01T15:40:35.2987697Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:40:42.0196188Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-10-01T15:40:42.0281730Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:40:42.0284080Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:40:42.0307129Z Container is terminated. Total time elapsed: 1 ms.
+2025-10-01T15:40:42.0363409Z Site container: ocr-backend-app terminated during site startup.
+2025-10-01T15:40:42.0605006Z Failed to start site. Revert by stopping site.
+2025-10-01T15:40:42.0664401Z Site: ocr-backend-app stopped.
+2025-10-01T15:41:07.4886780Z Container start method called.
+2025-10-01T15:41:07.5175605Z Establishing network.
+2025-10-01T15:41:07.5177416Z Pulling image: assetmgmtsuiacr.azurecr.io/ocr-backend:latest.
+2025-10-01T15:41:11.5996762Z Container pull image failed with reason: ImagePullFailure. Revert by terminate.
+2025-10-01T15:41:11.6003409Z Container is terminating. Grace period: 5 seconds.
+2025-10-01T15:41:11.6077842Z Container spec TerminationMessagePolicy  path 
+2025-10-01T15:41:11.6089378Z Container is terminated. Total time elapsed: 0 ms.
+2025-10-01T15:41:11.6097253Z Site container: ocr-backend-app terminated during site startup.
+2025-10-01T15:41:11.6354343Z Failed to start site. Revert by stopping site.
+2025-10-01T15:41:11.6366473Z Site: ocr-backend-app stopped.

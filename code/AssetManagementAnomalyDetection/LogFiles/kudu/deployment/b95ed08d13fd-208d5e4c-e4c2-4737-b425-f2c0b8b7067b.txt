@@ -1,0 +1,72 @@
+2025-10-01T15:19:42  Fetching changes.
+2025-10-01T15:19:43    Starting  LocalZipHandler
+2025-10-01T15:19:43    Cleaning up temp folders from previous zip deployments and extracting pushed zip file /tmp/zipdeploy/98deac32-6ed2-485b-a258-8bd7fca95cdb.zip (12.51 MB) to /tmp/zipdeploy/extracted
+2025-10-01T15:19:51  Updating submodules.
+2025-10-01T15:19:52  Preparing deployment for commit id 'a9e5a5d9-4'.
+2025-10-01T15:19:52  PreDeployment: context.CleanOutputPath False
+2025-10-01T15:19:53  PreDeployment: context.OutputPath /home/site/wwwroot
+2025-10-01T15:19:53  Repository path is /tmp/zipdeploy/extracted
+2025-10-01T15:19:53  Oryx-Build: Running kudu sync...
+2025-10-01T15:19:53    Command: kudusync -v 50 -f /tmp/zipdeploy/extracted -t /home/site/wwwroot -n /home/site/deployments/a9e5a5d9-4697-4a6e-9cf7-645bd6e667fe/manifest -p /home/site/deployments/d5988dc0-bab1-494b-a103-a92c4b404475/manifest -i ".git;.hg;.deployment;.deploy.sh"
+2025-10-01T15:19:55    Kudu sync from: '/tmp/zipdeploy/extracted' to: '/home/site/wwwroot'
+2025-10-01T15:19:55    Ignoring: .deployment
+2025-10-01T15:19:55    Copying file: '.dockerignore'
+2025-10-01T15:19:56    Copying file: 'AZURE_DEPLOYMENT.md'
+2025-10-01T15:19:56    Copying file: 'Balanced_Portfolio_Anamoly_Result.jpg'
+2025-10-01T15:19:56    Copying file: 'DOCKER_TEST_RESULTS.md'
+2025-10-01T15:19:56    Copying file: 'Dockerfile'
+2025-10-01T15:19:57    Copying file: 'FULL_TEST_RESULTS.md'
+2025-10-01T15:19:57    Copying file: 'README.md'
+2025-10-01T15:19:57    Copying file: 'Tech_Growth_Fund_Anamoly_Result.jpg'
+2025-10-01T15:19:57    Copying file: 'app.py'
+2025-10-01T15:19:57    Copying file: 'backend.log'
+2025-10-01T15:19:57    Copying file: 'db.py'
+2025-10-01T15:19:57    Copying file: 'db_init.sql'
+2025-10-01T15:19:57    Copying file: 'deployment.zip'
+2025-10-01T15:19:57    Copying file: 'export_local_to_sqlserver_sql.py'
+2025-10-01T15:19:59    Copying file: 'models.py'
+2025-10-01T15:19:59    Copying file: 'ocr-logs.zip'
+2025-10-01T15:20:00    Copying file: 'requirements.txt'
+2025-10-01T15:20:00    Copying file: 'run_tests.sh'
+2025-10-01T15:20:00    Copying file: 'sample_data.py'
+2025-10-01T15:20:00    Copying file: 'startup.sh'
+2025-10-01T15:20:00    Copying file: 'sync_to_azure.py'
+2025-10-01T15:20:00    Copying file: 'test-upload.html'
+2025-10-01T15:20:00    Copying file: 'web.config'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/.deployment'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/.dockerignore'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/AZURE_DEPLOYMENT.md'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/Balanced_Portfolio_Anamoly_Result.jpg'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/DOCKER_TEST_RESULTS.md'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/Dockerfile'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/FULL_TEST_RESULTS.md'
+2025-10-01T15:20:00    Deleting file: 'AssetManagementAnomalyDetection/README.md'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/Tech_Growth_Fund_Anamoly_Result.jpg'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/app.py'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/backend.log'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/db.py'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/db_init.sql'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/deployment.zip'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/export_local_to_sqlserver_sql.py'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/models.py'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/ocr-logs.zip'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/requirements.txt'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/run_tests.sh'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/sample_data.py'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/startup.sh'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/sync_to_azure.py'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/test-upload.html'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/web.config'
+2025-10-01T15:20:01    Deleting file: 'AssetManagementAnomalyDetection/.venv_azure/.gitignore'
+2025-10-01T15:20:01    Omitting next output lines...
+2025-10-01T15:20:20    Processed 1755 files...
+2025-10-01T15:20:40    Processed 2119 files...
+2025-10-01T15:21:00    Processed 2529 files...
+2025-10-01T15:21:21    Processed 2938 files...
+2025-10-01T15:21:22  Running post deployment command(s)...
+2025-10-01T15:21:22  
+2025-10-01T15:21:22  Generating summary of Oryx build
+2025-10-01T15:21:22  Deployment Log file does not exist in /tmp/oryx-build.log
+2025-10-01T15:21:22  The logfile at /tmp/oryx-build.log is empty. Unable to fetch the summary of build
+2025-10-01T15:21:22  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-10-01T15:21:22  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy
