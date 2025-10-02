@@ -338,7 +338,9 @@
                     const row = tbody.insertRow();
 
                     // Field name (formatted)
-                    row.insertCell(0).textContent = field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    const displayName = field === 'property_id' ? 'Address' :
+                                        field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    row.insertCell(0).textContent = displayName;
 
                     // Value
                     const valueCell = row.insertCell(1);
