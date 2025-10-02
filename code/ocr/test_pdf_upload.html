@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Upload Test - Azure Document Intelligence</title>
+    <title>PDF Upload Test - OCR Service</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
@@ -150,7 +150,7 @@
             font-size: 12px;
             margin-left: 10px;
         }
-        .method-badge.azure {
+        .method-badge.cloud {
             background: #0078D4;
         }
         .method-badge.local {
@@ -161,7 +161,7 @@
 <body>
     <div class="container">
         <h1>PDF Upload Test</h1>
-        <p class="subtitle">Azure Document Intelligence Integration</p>
+        <p class="subtitle">PDF Document Processing Service</p>
 
         <div class="upload-area" id="uploadArea">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#0078D4" stroke-width="2" style="margin-bottom: 10px;">
@@ -314,8 +314,8 @@
                 statusEl.className = 'status success';
 
                 // Show method badge
-                methodBadge.textContent = data.method === 'azure' ? 'Azure AI' : 'Local OCR';
-                methodBadge.className = `method-badge ${data.method}`;
+                methodBadge.textContent = data.method === 'azure' ? 'Cloud OCR' : 'Local OCR';
+                methodBadge.className = `method-badge ${data.method === 'azure' ? 'cloud' : 'local'}`;
                 methodBadge.style.display = 'inline-block';
 
                 // Hide error message
