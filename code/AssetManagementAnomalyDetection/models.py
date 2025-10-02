@@ -49,3 +49,35 @@ class Anomaly(db.Model):
 
     # Relationship to fee
     fee = db.relationship('Fee', backref='anomalies')
+
+class ParsedStatement(db.Model):
+    """
+    Store parsed rental statement data from PDF uploads.
+    This table gets completely rewritten with each new batch upload (prototype approach).
+    """
+    __tablename__ = 'parsed_statements'
+
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(255), nullable=False)  # Source PDF filename
+    upload_batch = db.Column(db.String(100), nullable=False)  # Batch identifier (timestamp-based)
+
+    # Property and date info
+    property_id = db.Column(db.String(255), nullable=True)  # Address/Property identifier
+    statement_date = db.Column(db.String(50), nullable=True)  # Date from the statement
+
+    # Financial data
+    rent = db.Column(db.Float, nullable=True)
+    management_fee = db.Column(db.Float, nullable=True)
+    repair = db.Column(db.Float, nullable=True)
+    deposit = db.Column(db.Float, nullable=True)
+    misc = db.Column(db.Float, nullable=True)
+    total = db.Column(db.Float, nullable=True)
+
+    # Metadata
+    confidence = db.Column(db.Float, nullable=True)  # OCR confidence score
+    processing_method = db.Column(db.String(50), nullable=True)  # 'azure' or 'local'
+    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    # Additional fields for debugging/auditing
+    raw_text = db.Column(db.Text, nullable=True)  # Optional: store raw extracted text
+    field_confidences = db.Column(db.Text, nullable=True)  # JSON string of per-field confidence

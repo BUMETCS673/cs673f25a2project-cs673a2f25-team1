@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+import json
+from datetime import datetime
 from dotenv import load_dotenv
 from db import db
 from sqlalchemy import text
@@ -68,7 +70,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 # Import models after db is initialized
-from models import Portfolio, Asset, Fee, Anomaly
+from models import Portfolio, Asset, Fee, Anomaly, ParsedStatement
 
 @app.route('/')
 def home():
@@ -193,6 +195,245 @@ def upload_pdf():
         return jsonify({
             'success': False,
             'error': 'Processing failed',
+            'message': str(e)
+        }), 500
+
+@app.route('/api/upload-pdf-batch', methods=['POST'])
+def upload_pdf_batch():
+    """
+    Upload multiple PDF rental statements and store parsed data in database.
+    Completely rewrites the parsed_statements table with each batch upload.
+    """
+    try:
+        # Check if files are present
+        if 'files' not in request.files:
+            return jsonify({
+                'success': False,
+                'error': 'No files provided',
+                'message': 'Please upload PDF files using the "files" field'
+            }), 400
+
+        files = request.files.getlist('files')
+
+        if not files or len(files) == 0:
+            return jsonify({
+                'success': False,
+                'error': 'No files selected',
+                'message': 'Please select at least one PDF file to upload'
+            }), 400
+
+        # Generate batch identifier
+        batch_id = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+
+        # Import OCR processor
+        import sys
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from ocr.azure_processor import get_ocr_processor
+        processor = get_ocr_processor()
+
+        # Process all PDFs and collect results
+        parsed_records = []
+        success_count = 0
+        error_count = 0
+        errors = []
+
+        for file in files:
+            # Validate file type
+            if not file.filename.lower().endswith('.pdf'):
+                errors.append(f"{file.filename}: Not a PDF file")
+                error_count += 1
+                continue
+
+            try:
+                # Read and process PDF
+                pdf_bytes = file.read()
+                extracted_data, confidence = processor.process_pdf_bytes(pdf_bytes)
+
+                # Create ParsedStatement record
+                statement = ParsedStatement(
+                    filename=file.filename,
+                    upload_batch=batch_id,
+                    property_id=extracted_data.get('property_id'),
+                    statement_date=extracted_data.get('date'),
+                    rent=extracted_data.get('rent'),
+                    management_fee=extracted_data.get('management_fee'),
+                    repair=extracted_data.get('repair'),
+                    deposit=extracted_data.get('deposit'),
+                    misc=extracted_data.get('misc'),
+                    total=extracted_data.get('total'),
+                    confidence=confidence,
+                    processing_method='azure' if 'Azure' in processor.__class__.__name__ else 'local',
+                    field_confidences=json.dumps(extracted_data.get('field_confidences', {}))
+                )
+
+                parsed_records.append(statement)
+                success_count += 1
+
+            except Exception as e:
+                errors.append(f"{file.filename}: {str(e)}")
+                error_count += 1
+
+        # Store in database (complete rewrite)
+        if parsed_records:
+            try:
+                # Start transaction
+                # Clear existing data (complete rewrite for prototype)
+                ParsedStatement.query.delete()
+
+                # Add all new records
+                for record in parsed_records:
+                    db.session.add(record)
+
+                # Commit transaction
+                db.session.commit()
+
+                print(f"Stored {len(parsed_records)} parsed statements in batch {batch_id}")
+
+            except Exception as e:
+                db.session.rollback()
+                return jsonify({
+                    'success': False,
+                    'error': 'Database error',
+                    'message': f'Failed to store parsed data: {str(e)}'
+                }), 500
+
+        return jsonify({
+            'success': True,
+            'batch_id': batch_id,
+            'processed': success_count,
+            'errors': error_count,
+            'error_details': errors,
+            'message': f'Successfully processed {success_count} file(s), stored in database'
+        }), 200
+
+    except Exception as e:
+        print(f"Batch upload error: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Processing failed',
+            'message': str(e)
+        }), 500
+
+@app.route('/api/parsed-statements', methods=['GET'])
+def get_parsed_statements():
+    """
+    Retrieve all parsed statement data from the database.
+    Supports pagination and filtering.
+    """
+    try:
+        # Get query parameters
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 50, type=int)
+        property_id = request.args.get('property_id', None)
+
+        # Build query
+        query = ParsedStatement.query
+
+        # Apply filter if provided
+        if property_id:
+            query = query.filter_by(property_id=property_id)
+
+        # Order by upload time (most recent first)
+        query = query.order_by(ParsedStatement.uploaded_at.desc())
+
+        # Paginate results
+        paginated = query.paginate(page=page, per_page=per_page, error_out=False)
+
+        # Format results
+        statements = []
+        for stmt in paginated.items:
+            statements.append({
+                'id': stmt.id,
+                'filename': stmt.filename,
+                'upload_batch': stmt.upload_batch,
+                'property_id': stmt.property_id,
+                'statement_date': stmt.statement_date,
+                'rent': stmt.rent,
+                'management_fee': stmt.management_fee,
+                'repair': stmt.repair,
+                'deposit': stmt.deposit,
+                'misc': stmt.misc,
+                'total': stmt.total,
+                'confidence': stmt.confidence,
+                'processing_method': stmt.processing_method,
+                'uploaded_at': stmt.uploaded_at.isoformat() if stmt.uploaded_at else None
+            })
+
+        return jsonify({
+            'success': True,
+            'data': statements,
+            'total': paginated.total,
+            'page': page,
+            'per_page': per_page,
+            'total_pages': paginated.pages
+        }), 200
+
+    except Exception as e:
+        print(f"Error fetching parsed statements: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to fetch data',
+            'message': str(e)
+        }), 500
+
+@app.route('/api/parsed-statements/summary', methods=['GET'])
+def get_parsed_statements_summary():
+    """
+    Get aggregated summary of parsed statement data.
+    """
+    try:
+        # Get all statements
+        statements = ParsedStatement.query.all()
+
+        if not statements:
+            return jsonify({
+                'success': True,
+                'summary': {
+                    'total_records': 0,
+                    'total_properties': 0,
+                    'total_rent': 0,
+                    'total_fees': 0,
+                    'average_confidence': 0,
+                    'last_upload': None
+                }
+            }), 200
+
+        # Calculate aggregates
+        properties = set()
+        total_rent = 0
+        total_fees = 0
+        total_confidence = 0
+        last_upload = None
+
+        for stmt in statements:
+            if stmt.property_id:
+                properties.add(stmt.property_id)
+            total_rent += stmt.rent or 0
+            total_fees += stmt.management_fee or 0
+            total_confidence += stmt.confidence or 0
+            if not last_upload or stmt.uploaded_at > last_upload:
+                last_upload = stmt.uploaded_at
+
+        avg_confidence = total_confidence / len(statements) if statements else 0
+
+        return jsonify({
+            'success': True,
+            'summary': {
+                'total_records': len(statements),
+                'total_properties': len(properties),
+                'total_rent': round(total_rent, 2),
+                'total_management_fees': round(total_fees, 2),
+                'average_confidence': round(avg_confidence, 2),
+                'last_upload': last_upload.isoformat() if last_upload else None,
+                'current_batch': statements[0].upload_batch if statements else None
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"Error generating summary: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to generate summary',
             'message': str(e)
         }), 500
 
