@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import json
@@ -75,6 +75,11 @@ from models import Portfolio, Asset, Fee, Anomaly, ParsedStatement
 @app.route('/')
 def home():
 	return jsonify({'message': 'Asset Management Anomaly Detection API'})
+
+@app.route('/upload')
+def upload_page():
+	"""Serve the PDF upload web page"""
+	return send_from_directory('static', 'upload.html')
 
 @app.route('/api/portfolios', methods=['GET'])
 def get_portfolios():
