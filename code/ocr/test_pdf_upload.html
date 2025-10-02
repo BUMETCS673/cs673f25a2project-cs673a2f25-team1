@@ -53,6 +53,22 @@
         .file-info {
             margin-top: 15px;
             color: #666;
+            max-height: 150px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .file-list-item {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .file-remove-btn {
+            color: #ff0000;
+            cursor: pointer;
+            font-weight: bold;
         }
         .submit-btn {
             background: #28a745;
@@ -156,6 +172,71 @@
         .method-badge.local {
             background: #6c757d;
         }
+        /* Multi-result styles */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+        .tab-btn.active {
+            border-bottom-color: #0078D4;
+            color: #0078D4;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .json-container {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .multi-results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .multi-results-table th {
+            background: #0078D4;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+        .multi-results-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+        .multi-results-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .multi-results-table tr:hover {
+            background: #e8f4ff;
+        }
+        .progress-info {
+            color: #0078D4;
+            font-size: 14px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -169,17 +250,18 @@
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            <p>Drag and drop your PDF here or</p>
+            <p>Drag and drop your PDFs here or</p>
             <label for="fileInput" class="upload-btn">Browse Files</label>
-            <input type="file" id="fileInput" accept=".pdf">
+            <input type="file" id="fileInput" accept=".pdf" multiple>
             <div class="file-info" id="fileInfo"></div>
         </div>
 
-        <button id="submitBtn" class="submit-btn" onclick="uploadPDF()">Process PDF</button>
+        <button id="submitBtn" class="submit-btn" onclick="uploadPDFs()">Process PDFs</button>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Processing your PDF...</p>
+            <p>Processing your PDFs...</p>
+            <p class="progress-info" id="progressInfo"></p>
         </div>
 
         <div class="results" id="results">
@@ -187,40 +269,50 @@
                 <h2>Extraction Results</h2>
                 <div>
                     <span class="status" id="status"></span>
-                    <span class="method-badge" id="methodBadge"></span>
                 </div>
             </div>
 
             <div id="errorMessage" style="display:none; color: red; margin: 20px 0;"></div>
 
-            <table class="data-table" id="dataTable" style="display:none;">
-                <thead>
-                    <tr>
-                        <th>Field</th>
-                        <th>Value</th>
-                        <th>Confidence</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+            <div class="tabs" id="resultTabs" style="display:none;">
+                <button class="tab-btn active" onclick="switchTab('table')">Table View</button>
+                <button class="tab-btn" onclick="switchTab('json')">JSON View</button>
+            </div>
 
-            <div style="margin-top: 20px;">
-                <h3>Overall Confidence</h3>
-                <div class="confidence-bar">
-                    <div class="confidence-fill" id="confidenceFill"></div>
-                </div>
-                <p id="confidenceText" style="margin-top: 5px; color: #666;"></p>
+            <div id="tableView" class="tab-content active">
+                <table class="multi-results-table" id="multiResultsTable" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Address</th>
+                            <th>Date</th>
+                            <th>Rent</th>
+                            <th>Mgmt Fee</th>
+                            <th>Repair</th>
+                            <th>Deposit</th>
+                            <th>Misc</th>
+                            <th>Total</th>
+                            <th>Confidence</th>
+                            <th>Method</th>
+                        </tr>
+                    </thead>
+                    <tbody id="multiTableBody"></tbody>
+                </table>
+            </div>
+
+            <div id="jsonView" class="tab-content">
+                <div class="json-container" id="jsonContainer"></div>
             </div>
         </div>
     </div>
 
     <script>
         const API_URL = 'http://127.0.0.1:5001/api/upload-pdf';
-        let selectedFile = null;
+        let selectedFiles = [];
 
         // File input handling
         document.getElementById('fileInput').addEventListener('change', function(e) {
-            handleFileSelect(e.target.files[0]);
+            handleFileSelect(Array.from(e.target.files));
         });
 
         // Drag and drop handling
@@ -241,65 +333,117 @@
             uploadArea.style.backgroundColor = '#f9f9f9';
 
             if (e.dataTransfer.files.length > 0) {
-                handleFileSelect(e.dataTransfer.files[0]);
+                handleFileSelect(Array.from(e.dataTransfer.files));
             }
         });
 
-        function handleFileSelect(file) {
-            if (!file) return;
+        function handleFileSelect(files) {
+            if (!files || files.length === 0) return;
 
-            if (file.type !== 'application/pdf') {
-                alert('Please select a PDF file');
+            // Filter only PDF files
+            const pdfFiles = files.filter(file => file.type === 'application/pdf');
+
+            if (pdfFiles.length === 0) {
+                alert('Please select PDF files');
                 return;
             }
 
-            selectedFile = file;
-            document.getElementById('fileInfo').innerHTML = `
-                <strong>Selected:</strong> ${file.name}<br>
-                <small>Size: ${(file.size / 1024).toFixed(2)} KB</small>
-            `;
+            selectedFiles = pdfFiles;
+            updateFileList();
             document.getElementById('submitBtn').style.display = 'block';
         }
 
-        async function uploadPDF() {
-            if (!selectedFile) {
-                alert('Please select a PDF file first');
+        function updateFileList() {
+            const fileInfoDiv = document.getElementById('fileInfo');
+            if (selectedFiles.length === 0) {
+                fileInfoDiv.innerHTML = '';
+                document.getElementById('submitBtn').style.display = 'none';
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('file', selectedFile);
+            let html = `<strong>Selected ${selectedFiles.length} file(s):</strong><br>`;
+            selectedFiles.forEach((file, index) => {
+                html += `
+                    <div class="file-list-item">
+                        <span>${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>
+                        <span class="file-remove-btn" onclick="removeFile(${index})">×</span>
+                    </div>
+                `;
+            });
+            fileInfoDiv.innerHTML = html;
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
+        async function uploadPDFs() {
+            if (!selectedFiles || selectedFiles.length === 0) {
+                alert('Please select PDF files first');
+                return;
+            }
 
             // Show loading
             document.getElementById('loading').style.display = 'block';
             document.getElementById('results').style.display = 'none';
             document.getElementById('submitBtn').disabled = true;
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                });
+            const allResults = [];
+            let successCount = 0;
+            let errorCount = 0;
 
-                const data = await response.json();
+            // Process each file
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                const formData = new FormData();
+                formData.append('file', file);
 
-                // Hide loading
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('submitBtn').disabled = false;
+                // Update progress
+                document.getElementById('progressInfo').textContent =
+                    `Processing file ${i + 1} of ${selectedFiles.length}: ${file.name}`;
 
-                // Show results
-                displayResults(data, response.ok);
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        body: formData
+                    });
 
-            } catch (error) {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('submitBtn').disabled = false;
+                    const data = await response.json();
 
-                displayResults({
-                    success: false,
-                    error: 'Network error',
-                    message: error.message
-                }, false);
+                    allResults.push({
+                        filename: file.name,
+                        success: data.success,
+                        data: data.data,
+                        confidence: data.confidence,
+                        method: data.method,
+                        error: data.error,
+                        message: data.message
+                    });
+
+                    if (data.success) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                    }
+
+                } catch (error) {
+                    allResults.push({
+                        filename: file.name,
+                        success: false,
+                        error: 'Network error',
+                        message: error.message
+                    });
+                    errorCount++;
+                }
             }
+
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+
+            // Show results
+            displayMultipleResults(allResults, successCount, errorCount);
         }
 
         function displayResults(data, isOk) {
@@ -388,6 +532,103 @@
 
                 // Hide data table
                 document.getElementById('dataTable').style.display = 'none';
+            }
+        }
+
+        function displayMultipleResults(results, successCount, errorCount) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+
+            // Update status
+            const statusEl = document.getElementById('status');
+            if (successCount > 0 && errorCount === 0) {
+                statusEl.textContent = `Success: ${successCount} file(s) processed`;
+                statusEl.className = 'status success';
+            } else if (successCount > 0 && errorCount > 0) {
+                statusEl.textContent = `Partial Success: ${successCount} succeeded, ${errorCount} failed`;
+                statusEl.className = 'status warning';
+                statusEl.style.background = '#fff3cd';
+                statusEl.style.color = '#856404';
+            } else {
+                statusEl.textContent = `Error: All ${errorCount} file(s) failed`;
+                statusEl.className = 'status error';
+            }
+
+            // Show tabs
+            document.getElementById('resultTabs').style.display = 'block';
+            document.getElementById('multiResultsTable').style.display = 'table';
+
+            // Populate table
+            const tbody = document.getElementById('multiTableBody');
+            tbody.innerHTML = '';
+
+            results.forEach(result => {
+                const row = tbody.insertRow();
+
+                // Filename
+                row.insertCell(0).textContent = result.filename;
+
+                if (result.success && result.data) {
+                    // Address
+                    row.insertCell(1).textContent = result.data.property_id || '-';
+                    // Date
+                    row.insertCell(2).textContent = result.data.date || '-';
+                    // Rent
+                    row.insertCell(3).textContent = formatCurrency(result.data.rent);
+                    // Mgmt Fee
+                    row.insertCell(4).textContent = formatCurrency(result.data.management_fee);
+                    // Repair
+                    row.insertCell(5).textContent = formatCurrency(result.data.repair);
+                    // Deposit
+                    row.insertCell(6).textContent = formatCurrency(result.data.deposit);
+                    // Misc
+                    row.insertCell(7).textContent = formatCurrency(result.data.misc);
+                    // Total
+                    row.insertCell(8).textContent = formatCurrency(result.data.total);
+                    // Confidence
+                    const confCell = row.insertCell(9);
+                    const conf = result.confidence || 0;
+                    confCell.textContent = `${(conf * 100).toFixed(1)}%`;
+                    confCell.style.color = conf > 0.8 ? '#28a745' : conf > 0.5 ? '#ffc107' : '#dc3545';
+                    // Method
+                    row.insertCell(10).textContent = result.method || '-';
+                } else {
+                    // Error case - span across remaining columns
+                    const errorCell = row.insertCell(1);
+                    errorCell.colSpan = 10;
+                    errorCell.textContent = `Error: ${result.error || 'Processing failed'}`;
+                    errorCell.style.color = '#dc3545';
+                }
+            });
+
+            // Populate JSON view
+            document.getElementById('jsonContainer').textContent = JSON.stringify(results, null, 2);
+        }
+
+        function formatCurrency(value) {
+            if (value === null || value === undefined) return '-';
+            if (typeof value === 'number') return `$${value.toFixed(2)}`;
+            return value;
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update tab content
+            document.getElementById('tableView').classList.remove('active');
+            document.getElementById('jsonView').classList.remove('active');
+
+            if (tabName === 'table') {
+                document.getElementById('tableView').classList.add('active');
+            } else {
+                document.getElementById('jsonView').classList.add('active');
             }
         }
     </script>
