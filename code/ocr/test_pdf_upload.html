@@ -293,7 +293,6 @@
                             <th>Misc</th>
                             <th>Total</th>
                             <th>Confidence</th>
-                            <th>Method</th>
                         </tr>
                     </thead>
                     <tbody id="multiTableBody"></tbody>
@@ -542,7 +541,7 @@
             // Update status
             const statusEl = document.getElementById('status');
             if (successCount > 0 && errorCount === 0) {
-                statusEl.textContent = `Success: ${successCount} file(s) processed`;
+                statusEl.textContent = 'Success';
                 statusEl.className = 'status success';
             } else if (successCount > 0 && errorCount > 0) {
                 statusEl.textContent = `Partial Success: ${successCount} succeeded, ${errorCount} failed`;
@@ -590,12 +589,10 @@
                     const conf = result.confidence || 0;
                     confCell.textContent = `${(conf * 100).toFixed(1)}%`;
                     confCell.style.color = conf > 0.8 ? '#28a745' : conf > 0.5 ? '#ffc107' : '#dc3545';
-                    // Method
-                    row.insertCell(10).textContent = result.method || '-';
                 } else {
                     // Error case - span across remaining columns
                     const errorCell = row.insertCell(1);
-                    errorCell.colSpan = 10;
+                    errorCell.colSpan = 9;
                     errorCell.textContent = `Error: ${result.error || 'Processing failed'}`;
                     errorCell.style.color = '#dc3545';
                 }
