@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload Test - Azure Document Intelligence</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .upload-area {
+            border: 2px dashed #0078D4;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-btn {
+            background: #0078D4;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-block;
+        }
+        .upload-btn:hover {
+            background: #005a9e;
+        }
+        .file-info {
+            margin-top: 15px;
+            color: #666;
+        }
+        .submit-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+        }
+        .submit-btn:hover {
+            background: #218838;
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .status {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .data-table td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .confidence-bar {
+            background: #e9ecef;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .confidence-fill {
+            background: linear-gradient(to right, #28a745, #20c997);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0078D4;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .method-badge {
+            background: #6c757d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .method-badge.azure {
+            background: #0078D4;
+        }
+        .method-badge.local {
+            background: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Upload Test</h1>
+        <p class="subtitle">Azure Document Intelligence Integration</p>
+
+        <div class="upload-area" id="uploadArea">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#0078D4" stroke-width="2" style="margin-bottom: 10px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p>Drag and drop your PDF here or</p>
+            <label for="fileInput" class="upload-btn">Browse Files</label>
+            <input type="file" id="fileInput" accept=".pdf">
+            <div class="file-info" id="fileInfo"></div>
+        </div>
+
+        <button id="submitBtn" class="submit-btn" onclick="uploadPDF()">Process PDF</button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing your PDF...</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="result-header">
+                <h2>Extraction Results</h2>
+                <div>
+                    <span class="status" id="status"></span>
+                    <span class="method-badge" id="methodBadge"></span>
+                </div>
+            </div>
+
+            <div id="errorMessage" style="display:none; color: red; margin: 20px 0;"></div>
+
+            <table class="data-table" id="dataTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                        <th>Confidence</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+
+            <div style="margin-top: 20px;">
+                <h3>Overall Confidence</h3>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" id="confidenceFill"></div>
+                </div>
+                <p id="confidenceText" style="margin-top: 5px; color: #666;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:5001/api/upload-pdf';
+        let selectedFile = null;
+
+        // File input handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            handleFileSelect(e.target.files[0]);
+        });
+
+        // Drag and drop handling
+        const uploadArea = document.getElementById('uploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#e8f4ff';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#f9f9f9';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#f9f9f9';
+
+            if (e.dataTransfer.files.length > 0) {
+                handleFileSelect(e.dataTransfer.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            if (!file) return;
+
+            if (file.type !== 'application/pdf') {
+                alert('Please select a PDF file');
+                return;
+            }
+
+            selectedFile = file;
+            document.getElementById('fileInfo').innerHTML = `
+                <strong>Selected:</strong> ${file.name}<br>
+                <small>Size: ${(file.size / 1024).toFixed(2)} KB</small>
+            `;
+            document.getElementById('submitBtn').style.display = 'block';
+        }
+
+        async function uploadPDF() {
+            if (!selectedFile) {
+                alert('Please select a PDF file first');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('submitBtn').disabled = true;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+
+                // Show results
+                displayResults(data, response.ok);
+
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+
+                displayResults({
+                    success: false,
+                    error: 'Network error',
+                    message: error.message
+                }, false);
+            }
+        }
+
+        function displayResults(data, isOk) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+
+            const statusEl = document.getElementById('status');
+            const methodBadge = document.getElementById('methodBadge');
+
+            if (data.success) {
+                statusEl.textContent = 'Success';
+                statusEl.className = 'status success';
+
+                // Show method badge
+                methodBadge.textContent = data.method === 'azure' ? 'Azure AI' : 'Local OCR';
+                methodBadge.className = `method-badge ${data.method}`;
+                methodBadge.style.display = 'inline-block';
+
+                // Hide error message
+                document.getElementById('errorMessage').style.display = 'none';
+
+                // Show data table
+                const table = document.getElementById('dataTable');
+                table.style.display = 'table';
+
+                const tbody = document.getElementById('tableBody');
+                tbody.innerHTML = '';
+
+                // Add data rows
+                const fields = ['rent', 'management_fee', 'repair', 'deposit', 'misc', 'total', 'date', 'property_id'];
+
+                fields.forEach(field => {
+                    const value = data.data[field];
+                    const confidence = data.field_confidences?.[field] || 0;
+
+                    const row = tbody.insertRow();
+
+                    // Field name (formatted)
+                    row.insertCell(0).textContent = field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+                    // Value
+                    const valueCell = row.insertCell(1);
+                    if (value !== null && value !== undefined) {
+                        if (field === 'date') {
+                            valueCell.textContent = value;
+                        } else if (typeof value === 'number') {
+                            valueCell.textContent = `$${value.toFixed(2)}`;
+                        } else {
+                            valueCell.textContent = value;
+                        }
+                    } else {
+                        valueCell.textContent = '-';
+                        valueCell.style.color = '#999';
+                    }
+
+                    // Confidence
+                    const confCell = row.insertCell(2);
+                    if (confidence > 0) {
+                        confCell.textContent = `${(confidence * 100).toFixed(1)}%`;
+                        confCell.style.color = confidence > 0.8 ? '#28a745' : confidence > 0.5 ? '#ffc107' : '#dc3545';
+                    } else {
+                        confCell.textContent = '-';
+                        confCell.style.color = '#999';
+                    }
+                });
+
+                // Show overall confidence
+                const overallConfidence = data.confidence || 0;
+                document.getElementById('confidenceFill').style.width = `${overallConfidence * 100}%`;
+                document.getElementById('confidenceText').textContent = `${(overallConfidence * 100).toFixed(1)}% confidence`;
+
+            } else {
+                statusEl.textContent = 'Error';
+                statusEl.className = 'status error';
+                methodBadge.style.display = 'none';
+
+                // Show error message
+                const errorDiv = document.getElementById('errorMessage');
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = `
+                    <strong>Error:</strong> ${data.error || 'Unknown error'}<br>
+                    <small>${data.message || ''}</small>
+                `;
+
+                // Hide data table
+                document.getElementById('dataTable').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -117,6 +117,85 @@ def run_anomaly_detection(portfolio_id):
 
 	return jsonify({'message': 'Anomaly detection completed', 'anomalies_found': len(anomalies)})
 
+@app.route('/api/upload-pdf', methods=['POST'])
+def upload_pdf():
+    """
+    Upload and process a PDF rental statement using Azure Document Intelligence.
+    Falls back to local OCR if Azure is not configured.
+    """
+    try:
+        # Check if file is present in request
+        if 'file' not in request.files:
+            return jsonify({
+                'success': False,
+                'error': 'No file provided',
+                'message': 'Please upload a PDF file'
+            }), 400
+
+        file = request.files['file']
+
+        # Check if file is selected
+        if file.filename == '':
+            return jsonify({
+                'success': False,
+                'error': 'No file selected',
+                'message': 'Please select a PDF file to upload'
+            }), 400
+
+        # Validate file type
+        if not file.filename.lower().endswith('.pdf'):
+            return jsonify({
+                'success': False,
+                'error': 'Invalid file type',
+                'message': 'Only PDF files are supported'
+            }), 400
+
+        # Read file bytes
+        pdf_bytes = file.read()
+
+        # Import OCR processor
+        import sys
+        import os
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from ocr.azure_processor import get_ocr_processor
+
+        # Get appropriate processor (Azure or local fallback)
+        processor = get_ocr_processor()
+
+        # Process the PDF
+        extracted_data, confidence = processor.process_pdf_bytes(pdf_bytes)
+
+        # Prepare response
+        response = {
+            'success': True,
+            'data': {
+                'rent': extracted_data.get('rent'),
+                'management_fee': extracted_data.get('management_fee'),
+                'repair': extracted_data.get('repair'),
+                'deposit': extracted_data.get('deposit'),
+                'misc': extracted_data.get('misc'),
+                'total': extracted_data.get('total'),
+                'date': extracted_data.get('date'),
+                'property_id': extracted_data.get('property_id')
+            },
+            'confidence': round(confidence, 2),
+            'method': 'azure' if 'Azure' in processor.__class__.__name__ else 'local',
+            'field_confidences': extracted_data.get('field_confidences', {})
+        }
+
+        # Log successful processing
+        print(f"PDF processed successfully: {file.filename} (confidence: {confidence:.2f})")
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        print(f"PDF processing error: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Processing failed',
+            'message': str(e)
+        }), 500
+
 @app.route('/api/statement-raw', methods=['GET'])
 def get_statement_raw():
     limit = int(request.args.get('limit', 5))
