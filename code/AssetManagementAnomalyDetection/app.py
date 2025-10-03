@@ -161,9 +161,6 @@ def upload_pdf():
         pdf_bytes = file.read()
 
         # Import OCR processor
-        import sys
-        import os
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from ocr.azure_processor import get_ocr_processor
 
         # Get appropriate processor (Azure or local fallback)
@@ -231,8 +228,6 @@ def upload_pdf_batch():
         batch_id = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
 
         # Import OCR processor
-        import sys
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from ocr.azure_processor import get_ocr_processor
         processor = get_ocr_processor()
 
