@@ -158,16 +158,24 @@ def upload_pdf():
             }), 400
 
         # Read file bytes
+        print(f"[STEP 1] Reading PDF file: {file.filename}")
         pdf_bytes = file.read()
+        print(f"[STEP 1] Read {len(pdf_bytes)} bytes")
 
         # Import OCR processor
+        print(f"[STEP 2] Importing OCR processor")
         from ocr.azure_processor import get_ocr_processor
+        print(f"[STEP 2] Import successful")
 
         # Get appropriate processor (Azure or local fallback)
+        print(f"[STEP 3] Getting OCR processor instance")
         processor = get_ocr_processor()
+        print(f"[STEP 3] Processor type: {processor.__class__.__name__}")
 
         # Process the PDF
+        print(f"[STEP 4] Processing PDF with {processor.__class__.__name__}")
         extracted_data, confidence = processor.process_pdf_bytes(pdf_bytes)
+        print(f"[STEP 4] Processing complete. Confidence: {confidence}")
 
         # Prepare response
         response = {
@@ -193,11 +201,20 @@ def upload_pdf():
         return jsonify(response), 200
 
     except Exception as e:
-        print(f"PDF processing error: {e}")
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"===== PDF PROCESSING ERROR =====")
+        print(f"Error: {e}")
+        print(f"Error type: {type(e).__name__}")
+        print(f"Full traceback:\n{error_details}")
+        print(f"================================")
+        logger.error(f"PDF processing error: {e}", exc_info=True)
         return jsonify({
             'success': False,
             'error': 'Processing failed',
-            'message': str(e)
+            'error_type': type(e).__name__,
+            'message': str(e),
+            'traceback': error_details if os.getenv('FLASK_ENV') == 'development' else None
         }), 500
 
 @app.route('/api/upload-pdf-batch', methods=['POST'])
