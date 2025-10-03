@@ -346,11 +346,7 @@
         <div class="endpoint-selector">
             <strong>Select API Endpoint:</strong><br>
             <label>
-                <input type="radio" name="endpoint" value="local" checked onchange="updateEndpoint()">
-                Local (http://127.0.0.1:5001)
-            </label>
-            <label>
-                <input type="radio" name="endpoint" value="azure" onchange="updateEndpoint()">
+                <input type="radio" name="endpoint" value="azure" checked onchange="updateEndpoint()">
                 Azure (https://ocr-backend-app.azurewebsites.net)
             </label>
             <label>
@@ -464,7 +460,7 @@
 
     <script>
         // Global variables
-        let API_BASE = 'http://127.0.0.1:5001';
+        let API_BASE = 'https://ocr-backend-app.azurewebsites.net';
         let selectedFiles = [];
         let uploadMode = 'batch';
         let currentPage = 1;
@@ -475,10 +471,7 @@
             const selectedEndpoint = document.querySelector('input[name="endpoint"]:checked').value;
             const customUrlInput = document.getElementById('customUrlInput');
 
-            if (selectedEndpoint === 'local') {
-                API_BASE = 'http://127.0.0.1:5001';
-                customUrlInput.style.display = 'none';
-            } else if (selectedEndpoint === 'azure') {
+            if (selectedEndpoint === 'azure') {
                 API_BASE = 'https://ocr-backend-app.azurewebsites.net';
                 customUrlInput.style.display = 'none';
             } else if (selectedEndpoint === 'custom') {
