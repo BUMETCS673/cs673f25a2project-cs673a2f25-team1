@@ -1,0 +1,286 @@
+{
+  "analysis_metadata": {
+    "generated_at": "2025-09-22T22:36:49.648950",
+    "data_source": "code/sample-data/rental-statements/labels.csv",
+    "total_records": 134,
+    "analysis_version": "1.0"
+  },
+  "property_kpis": {
+    "97B Dempster": {
+      "total_rental_income": 13776.85,
+      "average_monthly_rent": 417.48030303030305,
+      "rent_volatility": 203.39859768575175,
+      "total_management_fees": 1837.27,
+      "total_repair_costs": 1643.64,
+      "total_miscellaneous_costs": 618.0,
+      "total_deposits": 1425.3,
+      "management_fee_ratio": 13.33592221734286,
+      "repair_cost_ratio": 11.930448542301034,
+      "misc_cost_ratio": 4.485785938004696,
+      "total_cost_ratio": 29.75215669764859,
+      "net_yield": 70.24784330235141,
+      "net_cash_flow": 9677.94,
+      "average_monthly_cash_flow": 293.27090909090913,
+      "statement_count": 33,
+      "date_range_months": 32.49014454664914,
+      "vacancy_rate": 3.0303030303030303
+    },
+    "Arranview": {
+      "total_rental_income": 18954.9,
+      "average_monthly_rent": 574.3909090909092,
+      "rent_volatility": 212.84903447578225,
+      "total_management_fees": 1895.49,
+      "total_repair_costs": 1858.0,
+      "total_miscellaneous_costs": 45.0,
+      "total_deposits": 0.0,
+      "management_fee_ratio": 10.0,
+      "repair_cost_ratio": 9.802214730755635,
+      "misc_cost_ratio": 0.23740563126157352,
+      "total_cost_ratio": 20.039620362017207,
+      "net_yield": 79.96037963798278,
+      "net_cash_flow": 15156.41,
+      "average_monthly_cash_flow": 459.2851515151515,
+      "statement_count": 33,
+      "date_range_months": 31.044678055190538,
+      "vacancy_rate": 0.0
+    },
+    "Bedford": {
+      "total_rental_income": 27150.0,
+      "average_monthly_rent": 399.2647058823529,
+      "rent_volatility": 6.063390625908324,
+      "total_management_fees": 2715.0,
+      "total_repair_costs": 1307.0,
+      "total_miscellaneous_costs": 575.0,
+      "total_deposits": 0.0,
+      "management_fee_ratio": 10.0,
+      "repair_cost_ratio": 4.813996316758748,
+      "misc_cost_ratio": 2.117863720073665,
+      "total_cost_ratio": 16.931860036832415,
+      "net_yield": 83.06813996316758,
+      "net_cash_flow": 22553.0,
+      "average_monthly_cash_flow": 331.6617647058824,
+      "statement_count": 68,
+      "date_range_months": 67.50985545335085,
+      "vacancy_rate": 0.0
+    }
+  },
+  "portfolio_metrics": {
+    "total_properties": 3,
+    "total_statements": 134,
+    "total_rental_income": 59881.75,
+    "total_management_fees": 6447.76,
+    "total_repair_costs": 4808.64,
+    "total_miscellaneous_costs": 1238.0,
+    "total_deposits": 1425.3,
+    "total_costs": 12494.400000000001,
+    "net_portfolio_value": 47387.35,
+    "portfolio_management_fee_ratio": 10.767487590125539,
+    "portfolio_repair_cost_ratio": 8.03022623754316,
+    "portfolio_total_cost_ratio": 20.86512167730569,
+    "portfolio_net_yield": 79.13487832269432,
+    "date_range_start": "2020-01-05",
+    "date_range_end": "2025-08-21",
+    "analysis_period_months": 67.50985545335085,
+    "average_monthly_rent": 887.0075279805353,
+    "average_monthly_costs": 185.07520000000002,
+    "average_monthly_cash_flow": 701.9323279805353
+  },
+  "seasonal_analysis": {
+    "monthly_averages": {
+      "January": {
+        "average_rent": 533.64,
+        "total_rent": 5870.0,
+        "statement_count": 11,
+        "average_management_fee": 53.36,
+        "average_repair_cost": 104.55,
+        "average_misc_cost": 1.39
+      },
+      "February": {
+        "average_rent": 425.0,
+        "total_rent": 4675.0,
+        "statement_count": 11,
+        "average_management_fee": 42.5,
+        "average_repair_cost": 35.18,
+        "average_misc_cost": 8.64
+      },
+      "March": {
+        "average_rent": 425.99,
+        "total_rent": 4259.9,
+        "statement_count": 10,
+        "average_management_fee": 42.6,
+        "average_repair_cost": 0.0,
+        "average_misc_cost": 0.0
+      },
+      "April": {
+        "average_rent": 538.04,
+        "total_rent": 7532.5,
+        "statement_count": 14,
+        "average_management_fee": 89.13,
+        "average_repair_cost": 20.12,
+        "average_misc_cost": 25.71
+      },
+      "May": {
+        "average_rent": 432.5,
+        "total_rent": 4325.0,
+        "statement_count": 10,
+        "average_management_fee": 43.25,
+        "average_repair_cost": 38.4,
+        "average_misc_cost": 4.5
+      },
+      "June": {
+        "average_rent": 432.69,
+        "total_rent": 5625.0,
+        "statement_count": 13,
+        "average_management_fee": 43.27,
+        "average_repair_cost": 26.04,
+        "average_misc_cost": 5.0
+      },
+      "July": {
+        "average_rent": 410.85,
+        "total_rent": 4519.35,
+        "statement_count": 11,
+        "average_management_fee": 41.09,
+        "average_repair_cost": 28.64,
+        "average_misc_cost": 13.86
+      },
+      "August": {
+        "average_rent": 384.09,
+        "total_rent": 4225.0,
+        "statement_count": 11,
+        "average_management_fee": 38.41,
+        "average_repair_cost": 5.45,
+        "average_misc_cost": -0.0
+      },
+      "September": {
+        "average_rent": 516.67,
+        "total_rent": 4650.0,
+        "statement_count": 9,
+        "average_management_fee": 47.78,
+        "average_repair_cost": 38.11,
+        "average_misc_cost": 0.0
+      },
+      "October": {
+        "average_rent": 415.91,
+        "total_rent": 4575.0,
+        "statement_count": 11,
+        "average_management_fee": 41.59,
+        "average_repair_cost": 0.0,
+        "average_misc_cost": 26.39
+      },
+      "November": {
+        "average_rent": 419.23,
+        "total_rent": 5450.0,
+        "statement_count": 13,
+        "average_management_fee": 41.92,
+        "average_repair_cost": 103.54,
+        "average_misc_cost": 16.54
+      },
+      "December": {
+        "average_rent": 417.5,
+        "total_rent": 4175.0,
+        "statement_count": 10,
+        "average_management_fee": 41.75,
+        "average_repair_cost": 20.35,
+        "average_misc_cost": 0.0
+      }
+    },
+    "peak_rent_month": 4,
+    "lowest_rent_month": 8,
+    "rent_seasonality": 34.51722778492968
+  },
+  "cost_optimization": {
+    "management_fee_analysis": {
+      "97B Dempster": {
+        "average_management_fee": 55.67484848484848,
+        "average_rent": 417.48030303030305,
+        "management_fee_ratio": 13.33592221734286,
+        "industry_benchmark": 10.0,
+        "optimization_potential": 3.33592221734286,
+        "potential_annual_savings": 167.1218181818181
+      },
+      "Arranview": {
+        "average_management_fee": 57.43909090909091,
+        "average_rent": 574.3909090909092,
+        "management_fee_ratio": 9.999999999999998,
+        "industry_benchmark": 10.0,
+        "optimization_potential": 0.0,
+        "potential_annual_savings": 0.0
+      },
+      "Bedford": {
+        "average_management_fee": 39.9264705882353,
+        "average_rent": 399.2647058823529,
+        "management_fee_ratio": 10.0,
+        "industry_benchmark": 10.0,
+        "optimization_potential": 0.0,
+        "potential_annual_savings": 0.0
+      }
+    },
+    "repair_cost_analysis": {
+      "97B Dempster": {
+        "average_repair_cost": 49.807272727272725,
+        "repair_cost_volatility": 96.16003166183206,
+        "industry_benchmark": 15.0,
+        "maintenance_efficiency_score": 88.06955145769896
+      },
+      "Arranview": {
+        "average_repair_cost": 56.303030303030305,
+        "repair_cost_volatility": 208.20234821689766,
+        "industry_benchmark": 15.0,
+        "maintenance_efficiency_score": 90.19778526924436
+      },
+      "Bedford": {
+        "average_repair_cost": 19.220588235294116,
+        "repair_cost_volatility": 51.79403688037102,
+        "industry_benchmark": 15.0,
+        "maintenance_efficiency_score": 95.18600368324125
+      }
+    },
+    "total_optimization_potential": {
+      "annual_savings_potential": 167.1218181818181,
+      "percentage_of_income": 0.2790863964092868,
+      "roi_timeline_months": 12.0
+    }
+  },
+  "risk_metrics": {
+    "payment_risk": {
+      "zero_rent_statements": 1,
+      "zero_rent_percentage": 0.7462686567164178,
+      "low_rent_statements": 22,
+      "payment_consistency_score": 99.25373134328358
+    },
+    "cost_volatility": {
+      "management_fee_volatility": 45.11504000725031,
+      "repair_cost_volatility": 119.57985468967624,
+      "total_cost_volatility": 143.14566526439455,
+      "cash_flow_volatility": 119.36142668715635
+    },
+    "concentration_risk": {
+      "largest_property_share": 50.74626865671642,
+      "top_2_properties_share": 75.37313432835822,
+      "concentration_risk_score": 50.74626865671642
+    },
+    "overall_risk_score": 15.88047233976296
+  },
+  "predictive_metrics": {
+    "rent_trend": {
+      "monthly_change": 0.30097864063142704,
+      "annual_projection": 3.6117436875771247,
+      "trend_direction": "increasing"
+    },
+    "cost_trend": {
+      "monthly_change": -0.1681530692402647,
+      "annual_projection": -2.0178368308831764,
+      "trend_direction": "decreasing"
+    },
+    "cash_flow_trend": {
+      "monthly_change": 0.4691317098716939,
+      "annual_projection": 5.629580518460327,
+      "trend_direction": "improving"
+    },
+    "forecasts": {
+      "next_month_rent_forecast": 400.3009786406314,
+      "next_month_costs_forecast": 39.83184693075974,
+      "next_month_cash_flow_forecast": 360.46913170987165
+    }
+  }
+}

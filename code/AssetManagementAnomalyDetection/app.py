@@ -28,7 +28,13 @@ def get_database_uri():
 	sqlite_path = os.path.join(base_dir, 'instance', 'asset_management.db')
 
 	# Development-first: prefer SQLite locally
-	if env != 'production' or use_local_sqlite:
+	if use_local_sqlite:
+		# When USE_LOCAL_SQLITE is explicitly set, always use SQLite
+		uri = f"sqlite:///{sqlite_path}"
+		print(f"Using local SQLite (USE_LOCAL_SQLITE=true): {uri}")
+		return uri
+
+	if env != 'production':
 		# Allow override via DATABASE_URL if explicitly provided
 		if os.getenv('DATABASE_URL'):
 			uri = os.getenv('DATABASE_URL')
