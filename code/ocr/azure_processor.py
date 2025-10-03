@@ -88,11 +88,12 @@ class AzureDocumentProcessor:
                                     field_confidences['management_fee'] = kv.confidence or 0.8
                                     print(f"[DEBUG] Found management fee via KV pairs: {extracted_data['management_fee']}")
 
-                            elif 'rent' in key_text and 'received' in key_text:
+                            elif any(term in key_text for term in ['rent', 'income', 'rental income']):
                                 number_match = re.search(r'[\d,]+\.?\d*', value_text)
                                 if number_match:
                                     extracted_data['rent'] = float(number_match.group().replace(',', ''))
                                     field_confidences['rent'] = kv.confidence or 0.8
+                                    print(f"[DEBUG] Found rent via KV pairs: {extracted_data['rent']}")
 
                             elif 'total' in key_text and 'balance' in key_text:
                                 number_match = re.search(r'[\d,]+\.?\d*', value_text)
@@ -114,7 +115,6 @@ class AzureDocumentProcessor:
                     'InvoiceTotal': 'total',
                     'AmountDue': 'total',
                     'Total': 'total',
-                    'SubTotal': 'rent',
                     'InvoiceDate': 'date',
                     'Date': 'date',
                     'CustomerName': 'property_id',
@@ -168,9 +168,12 @@ class AzureDocumentProcessor:
                                 elif 'deposit' in desc_lower:
                                     extracted_data['deposit'] = amount_value
                                     field_confidences['deposit'] = item_fields.get('Amount', {}).confidence or 0.0
-                                elif 'rent' in desc_lower:
-                                    extracted_data['rent'] = amount_value
-                                    field_confidences['rent'] = item_fields.get('Amount', {}).confidence or 0.0
+                                elif any(term in desc_lower for term in ['rent', 'rental', 'rent received', 'income']):
+                                    # Only set if not already set by KV pairs (preserve higher confidence)
+                                    if extracted_data.get('rent') is None:
+                                        extracted_data['rent'] = amount_value
+                                        field_confidences['rent'] = item_fields.get('Amount', {}).confidence or 0.0
+                                        print(f"[DEBUG] Matched rent via line items: {amount_value}")
                 else:
                     print("[DEBUG] No line items found in document")
 
@@ -199,6 +202,30 @@ class AzureDocumentProcessor:
                                 break
                             except ValueError:
                                 pass
+
+            # Fallback: Try to extract rent from raw text content
+            if extracted_data.get('rent') is None and hasattr(result, 'content'):
+                print(f"[DEBUG] Trying regex fallback for rent")
+                text_content = result.content
+
+                # Try multiple patterns for rent
+                rent_patterns = [
+                    r'Rent\s+received\s*\([^)]+\)\s*(\d+[\d,]*\.?\d*)',  # "Rent received (date range) 400.00"
+                    r'INCOME\s*(\d+[\d,]*\.?\d*)',                        # "INCOME 400.00"
+                    r'Total\s+income\s*(\d+[\d,]*\.?\d*)',                # "Total income 400.00"
+                    r'Rental\s+income\s*(\d+[\d,]*\.?\d*)',               # "Rental income 400.00"
+                ]
+
+                for pattern in rent_patterns:
+                    match = re.search(pattern, text_content, re.IGNORECASE)
+                    if match:
+                        try:
+                            extracted_data['rent'] = float(match.group(1).replace(',', ''))
+                            field_confidences['rent'] = 0.75  # Medium confidence for regex
+                            print(f"[DEBUG] Found rent via regex: {extracted_data['rent']}")
+                            break  # Stop after first match
+                        except ValueError:
+                            continue  # Try next pattern
 
             # Calculate overall confidence
             if field_confidences:
