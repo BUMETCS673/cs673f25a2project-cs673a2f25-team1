@@ -88,7 +88,7 @@ class AzureDocumentProcessor:
                                     field_confidences['management_fee'] = kv.confidence or 0.8
                                     print(f"[DEBUG] Found management fee via KV pairs: {extracted_data['management_fee']}")
 
-                            elif ('rent' in key_text and 'received' in key_text) or ('rent received' in key_text):
+                            elif any(term in key_text for term in ['rent', 'income', 'rental income']):
                                 number_match = re.search(r'[\d,]+\.?\d*', value_text)
                                 if number_match:
                                     extracted_data['rent'] = float(number_match.group().replace(',', ''))
@@ -115,7 +115,6 @@ class AzureDocumentProcessor:
                     'InvoiceTotal': 'total',
                     'AmountDue': 'total',
                     'Total': 'total',
-                    'SubTotal': 'rent',
                     'InvoiceDate': 'date',
                     'Date': 'date',
                     'CustomerName': 'property_id',
@@ -169,104 +168,64 @@ class AzureDocumentProcessor:
                                 elif 'deposit' in desc_lower:
                                     extracted_data['deposit'] = amount_value
                                     field_confidences['deposit'] = item_fields.get('Amount', {}).confidence or 0.0
-                                elif 'rent' in desc_lower:
-                                    extracted_data['rent'] = amount_value
-                                    field_confidences['rent'] = item_fields.get('Amount', {}).confidence or 0.0
+                                elif any(term in desc_lower for term in ['rent', 'rental', 'rent received', 'income']):
+                                    # Only set if not already set by KV pairs (preserve higher confidence)
+                                    if extracted_data.get('rent') is None:
+                                        extracted_data['rent'] = amount_value
+                                        field_confidences['rent'] = item_fields.get('Amount', {}).confidence or 0.0
+                                        print(f"[DEBUG] Matched rent via line items: {amount_value}")
                 else:
                     print("[DEBUG] No line items found in document")
 
-            # Fallback: Try to extract from raw text content
-            if hasattr(result, 'content'):
+            # Fallback: Try to extract management fee from the raw text content
+            if extracted_data.get('management_fee') is None and hasattr(result, 'content'):
+                print(f"[DEBUG] Trying regex fallback on document text")
                 text_content = result.content
 
-                # Try to extract rent if not found yet
-                if extracted_data.get('rent') is None:
-                    print(f"[DEBUG] Trying regex fallback for rent on document text")
-                    rent_patterns = [
-                        r'Rent\s+received[^£\$\d]*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # "Rent received £400.00"
-                        r'Rent\s+received\s*\([^)]*\)[^£\$\d]*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # "Rent received (dates) £400.00"
-                        r'INCOME\s*\n\s*Rent[^£\$\d]*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # Under INCOME section
-                        r'Rent[^£\$\d]*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # Simple "Rent £400.00"
-                    ]
+                # Look for management fee pattern
+                mgmt_patterns = [
+                    r'Management\s+fee\s*\([^)]+\)\s*[\d,]+\.?\d*',  # "Management fee (10%) 40.00"
+                    r'Management\s+fee.*?(\d+[\d,]*\.?\d*)',  # Any management fee followed by number
+                    r'Management.*?£(\d+[\d,]*\.?\d*)',  # Management with pound sign
+                ]
 
-                    for pattern in rent_patterns:
-                        match = re.search(pattern, text_content, re.IGNORECASE | re.DOTALL)
-                        if match:
+                for pattern in mgmt_patterns:
+                    match = re.search(pattern, text_content, re.IGNORECASE)
+                    if match:
+                        # Extract just the numeric part
+                        num_match = re.search(r'(\d+[\d,]*\.?\d*)$', match.group())
+                        if num_match:
                             try:
-                                rent_value = float(match.group(1).replace(',', ''))
-                                extracted_data['rent'] = rent_value
-                                field_confidences['rent'] = 0.75  # Medium confidence for regex
-                                print(f"[DEBUG] Found rent via regex: {rent_value}")
-                                break
-                            except ValueError:
-                                pass
-
-                # Try to extract management fee if not found yet
-                if extracted_data.get('management_fee') is None:
-                    print(f"[DEBUG] Trying regex fallback for management fee on document text")
-                    mgmt_patterns = [
-                        r'Management\s+fee\s*\([^)]+\)\s*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # "Management fee (10%) £40.00"
-                        r'Management\s+fee.*?[\$£]?\s*(\d+[\d,]*\.?\d*)',  # Any management fee followed by number
-                        r'Management.*?[\$£]?\s*(\d+[\d,]*\.?\d*)',  # Management with pound sign
-                    ]
-
-                    for pattern in mgmt_patterns:
-                        match = re.search(pattern, text_content, re.IGNORECASE)
-                        if match:
-                            try:
-                                mgmt_value = float(match.group(1).replace(',', ''))
-                                extracted_data['management_fee'] = mgmt_value
+                                extracted_data['management_fee'] = float(num_match.group().replace(',', ''))
                                 field_confidences['management_fee'] = 0.75  # Medium confidence for regex
-                                print(f"[DEBUG] Found management fee via regex: {mgmt_value}")
+                                print(f"[DEBUG] Found management fee via regex: {extracted_data['management_fee']}")
                                 break
                             except ValueError:
                                 pass
 
-                # Try to extract total if not found yet
-                if extracted_data.get('total') is None:
-                    print(f"[DEBUG] Trying regex fallback for total on document text")
-                    total_patterns = [
-                        r'TOTAL\s*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # "TOTAL £360.00"
-                        r'Total\s+amount\s*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # "Total amount £360.00"
-                        r'Balance\s+due\s*[\$£]?\s*(\d+[\d,]*\.?\d*)',  # "Balance due £360.00"
-                    ]
+            # Fallback: Try to extract rent from raw text content
+            if extracted_data.get('rent') is None and hasattr(result, 'content'):
+                print(f"[DEBUG] Trying regex fallback for rent")
+                text_content = result.content
 
-                    for pattern in total_patterns:
-                        match = re.search(pattern, text_content, re.IGNORECASE)
-                        if match:
-                            try:
-                                total_value = float(match.group(1).replace(',', ''))
-                                extracted_data['total'] = total_value
-                                field_confidences['total'] = 0.75  # Medium confidence for regex
-                                print(f"[DEBUG] Found total via regex: {total_value}")
-                                break
-                            except ValueError:
-                                pass
+                # Try multiple patterns for rent
+                rent_patterns = [
+                    r'Rent\s+received\s*\([^)]+\)\s*(\d+[\d,]*\.?\d*)',  # "Rent received (date range) 400.00"
+                    r'INCOME\s*(\d+[\d,]*\.?\d*)',                        # "INCOME 400.00"
+                    r'Total\s+income\s*(\d+[\d,]*\.?\d*)',                # "Total income 400.00"
+                    r'Rental\s+income\s*(\d+[\d,]*\.?\d*)',               # "Rental income 400.00"
+                ]
 
-            # Validation and correction logic
-            # If we have total and management fee but rent seems wrong, recalculate
-            if (extracted_data.get('total') is not None and
-                extracted_data.get('management_fee') is not None):
-
-                # Check if rent is suspiciously equal to management fee (common OCR error)
-                if (extracted_data.get('rent') == extracted_data.get('management_fee') and
-                    extracted_data.get('rent') is not None):
-                    # Likely error - recalculate rent from total
-                    calculated_rent = extracted_data['total'] + extracted_data['management_fee']
-                    print(f"[DEBUG] Rent equals management fee ({extracted_data['rent']}), likely error. Calculated rent should be: {calculated_rent}")
-
-                    # Only update if the calculated rent makes sense (typically rent > management fee)
-                    if calculated_rent > extracted_data['management_fee']:
-                        extracted_data['rent'] = calculated_rent
-                        field_confidences['rent'] = 0.65  # Lower confidence for calculated value
-                        print(f"[DEBUG] Corrected rent to: {calculated_rent}")
-
-                # If rent is missing, calculate it from total and management fee
-                elif extracted_data.get('rent') is None:
-                    calculated_rent = extracted_data['total'] + extracted_data['management_fee']
-                    extracted_data['rent'] = calculated_rent
-                    field_confidences['rent'] = 0.60  # Lower confidence for calculated value
-                    print(f"[DEBUG] Calculated missing rent from total and fees: {calculated_rent}")
+                for pattern in rent_patterns:
+                    match = re.search(pattern, text_content, re.IGNORECASE)
+                    if match:
+                        try:
+                            extracted_data['rent'] = float(match.group(1).replace(',', ''))
+                            field_confidences['rent'] = 0.75  # Medium confidence for regex
+                            print(f"[DEBUG] Found rent via regex: {extracted_data['rent']}")
+                            break  # Stop after first match
+                        except ValueError:
+                            continue  # Try next pattern
 
             # Calculate overall confidence
             if field_confidences:
