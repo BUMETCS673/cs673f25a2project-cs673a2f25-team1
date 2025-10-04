@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload & Database Management - OCR Service</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0078D4;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .endpoint-selector {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .endpoint-selector label {
+            display: inline-block;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        .endpoint-selector input[type="radio"] {
+            margin-right: 5px;
+        }
+        .custom-url-input {
+            margin-top: 10px;
+            display: none;
+        }
+        .custom-url-input input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .upload-mode-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .mode-btn {
+            padding: 10px 20px;
+            margin: 0 5px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .mode-btn.active {
+            background: #0078D4;
+            color: white;
+            border-color: #0078D4;
+        }
+        .upload-area {
+            border: 2px dashed #0078D4;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-btn {
+            background: #0078D4;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-block;
+        }
+        .upload-btn:hover {
+            background: #005a9e;
+        }
+        .file-info {
+            margin-top: 15px;
+            color: #666;
+            max-height: 150px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .file-list-item {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .file-remove-btn {
+            color: #ff0000;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-btn, .action-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .submit-btn {
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+        }
+        .submit-btn:hover, .action-btn:hover {
+            background: #218838;
+        }
+        .submit-btn:disabled, .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+        .action-btn.secondary:hover {
+            background: #545b62;
+        }
+        .action-btn.danger {
+            background: #dc3545;
+        }
+        .action-btn.danger:hover {
+            background: #c82333;
+        }
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .status {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .data-table, .multi-results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .data-table th, .multi-results-table th {
+            text-align: left;
+            padding: 10px;
+            background: #0078D4;
+            color: white;
+            font-size: 12px;
+        }
+        .data-table td, .multi-results-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+        .multi-results-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .multi-results-table tr:hover {
+            background: #e8f4ff;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0078D4;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+        .tab-btn.active {
+            border-bottom-color: #0078D4;
+            color: #0078D4;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .json-container {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .progress-info {
+            color: #0078D4;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .summary-box {
+            background: #f8f9fa;
+            border-left: 4px solid #0078D4;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .summary-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .summary-label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .summary-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pagination span {
+            padding: 0 10px;
+        }
+        .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .alert.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Upload Section -->
+    <div class="container">
+        <h1>PDF Upload & Database Management</h1>
+        <p class="subtitle">Advanced PDF Document Processing with Database Storage</p>
+
+        <!-- Endpoint Configuration -->
+        <div class="endpoint-selector">
+            <strong>Select API Endpoint:</strong><br>
+            <label>
+                <input type="radio" name="endpoint" value="azure" checked onchange="updateEndpoint()">
+                Azure (https://ocr-backend-app.azurewebsites.net)
+            </label>
+            <label>
+                <input type="radio" name="endpoint" value="custom" onchange="updateEndpoint()">
+                Custom URL
+            </label>
+            <div class="custom-url-input" id="customUrlInput">
+                <input type="text" id="customUrl" placeholder="Enter custom API URL (e.g., http://localhost:5000)" value="">
+            </div>
+        </div>
+
+        <!-- Upload Mode Selection -->
+        <div class="upload-mode-selector">
+            <button class="mode-btn active" onclick="selectMode('batch')">Batch Upload (Store in DB)</button>
+            <button class="mode-btn" onclick="selectMode('individual')">Individual Processing (No DB)</button>
+        </div>
+
+        <!-- Upload Area -->
+        <div class="upload-area" id="uploadArea">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#0078D4" stroke-width="2" style="margin-bottom: 10px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p>Drag and drop your PDFs here or</p>
+            <label for="fileInput" class="upload-btn">Browse Files</label>
+            <input type="file" id="fileInput" accept=".pdf" multiple>
+            <div class="file-info" id="fileInfo"></div>
+        </div>
+
+        <button id="submitBtn" class="submit-btn" onclick="processFiles()">Process PDFs</button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing your PDFs...</p>
+            <p class="progress-info" id="progressInfo"></p>
+        </div>
+
+        <div class="results" id="uploadResults">
+            <div class="result-header">
+                <h3>Upload Results</h3>
+                <span class="status" id="uploadStatus"></span>
+            </div>
+            <div id="uploadResultContent"></div>
+        </div>
+    </div>
+
+    <!-- Database Viewer Section -->
+    <div class="container">
+        <h2>Database Management</h2>
+
+        <!-- Summary Statistics -->
+        <div class="summary-box" id="summaryBox" style="display:none;">
+            <h3>Database Summary</h3>
+            <div class="summary-grid" id="summaryGrid"></div>
+        </div>
+
+        <!-- Database Actions -->
+        <div style="margin: 20px 0;">
+            <button class="action-btn" onclick="loadSummary()">Load Summary</button>
+            <button class="action-btn secondary" onclick="loadStatements(1)">View All Statements</button>
+            <button class="action-btn secondary" onclick="exportData()">Export to JSON</button>
+            <button class="action-btn danger" onclick="clearDatabase()" style="float:right;">Clear Database</button>
+        </div>
+
+        <!-- Statements Table -->
+        <div id="statementsSection" style="display:none;">
+            <h3>Parsed Statements</h3>
+
+            <!-- Filter Options -->
+            <div style="margin-bottom: 15px;">
+                <label>Filter by Property:
+                    <input type="text" id="propertyFilter" placeholder="Enter property ID" style="margin-left: 10px; padding: 5px;">
+                    <button onclick="applyFilter()" style="margin-left: 10px; padding: 5px 10px;">Apply Filter</button>
+                    <button onclick="clearFilter()" style="margin-left: 5px; padding: 5px 10px;">Clear</button>
+                </label>
+            </div>
+
+            <table class="multi-results-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Filename</th>
+                        <th>Property</th>
+                        <th>Date</th>
+                        <th>Rent</th>
+                        <th>Mgmt Fee</th>
+                        <th>Repair</th>
+                        <th>Deposit</th>
+                        <th>Misc</th>
+                        <th>Total</th>
+                        <th>Confidence</th>
+                        <th>Method</th>
+                        <th>Uploaded</th>
+                    </tr>
+                </thead>
+                <tbody id="statementsTableBody"></tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button onclick="previousPage()" id="prevBtn">Previous</button>
+                <span id="pageInfo">Page 1</span>
+                <button onclick="nextPage()" id="nextBtn">Next</button>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="messageArea"></div>
+    </div>
+
+    <script>
+        // Global variables
+        let API_BASE = 'https://ocr-backend-app.azurewebsites.net';
+        let selectedFiles = [];
+        let uploadMode = 'batch';
+        let currentPage = 1;
+        let totalPages = 1;
+
+        // Endpoint management
+        function updateEndpoint() {
+            const selectedEndpoint = document.querySelector('input[name="endpoint"]:checked').value;
+            const customUrlInput = document.getElementById('customUrlInput');
+
+            if (selectedEndpoint === 'azure') {
+                API_BASE = 'https://ocr-backend-app.azurewebsites.net';
+                customUrlInput.style.display = 'none';
+            } else if (selectedEndpoint === 'custom') {
+                customUrlInput.style.display = 'block';
+                const customUrl = document.getElementById('customUrl').value;
+                if (customUrl) {
+                    API_BASE = customUrl.replace(/\/$/, ''); // Remove trailing slash
+                }
+            }
+            console.log('API endpoint updated to:', API_BASE);
+        }
+
+        // Custom URL input handler
+        document.getElementById('customUrl').addEventListener('input', function(e) {
+            if (document.querySelector('input[name="endpoint"]:checked').value === 'custom') {
+                API_BASE = e.target.value.replace(/\/$/, '');
+                console.log('API endpoint updated to:', API_BASE);
+            }
+        });
+
+        // Mode selection
+        function selectMode(mode) {
+            uploadMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update submit button text
+            const submitBtn = document.getElementById('submitBtn');
+            if (mode === 'batch') {
+                submitBtn.textContent = 'Upload & Store in Database';
+            } else {
+                submitBtn.textContent = 'Process PDFs (No Storage)';
+            }
+        }
+
+        // File handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            handleFileSelect(Array.from(e.target.files));
+        });
+
+        // Drag and drop
+        const uploadArea = document.getElementById('uploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#e8f4ff';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#f9f9f9';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#f9f9f9';
+
+            if (e.dataTransfer.files.length > 0) {
+                handleFileSelect(Array.from(e.dataTransfer.files));
+            }
+        });
+
+        function handleFileSelect(files) {
+            if (!files || files.length === 0) return;
+
+            const pdfFiles = files.filter(file => file.type === 'application/pdf');
+
+            if (pdfFiles.length === 0) {
+                showMessage('Please select PDF files', 'error');
+                return;
+            }
+
+            selectedFiles = pdfFiles;
+            updateFileList();
+            document.getElementById('submitBtn').style.display = 'block';
+        }
+
+        function updateFileList() {
+            const fileInfoDiv = document.getElementById('fileInfo');
+            if (selectedFiles.length === 0) {
+                fileInfoDiv.innerHTML = '';
+                document.getElementById('submitBtn').style.display = 'none';
+                return;
+            }
+
+            let html = `<strong>Selected ${selectedFiles.length} file(s):</strong><br>`;
+            selectedFiles.forEach((file, index) => {
+                html += `
+                    <div class="file-list-item">
+                        <span>${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>
+                        <span class="file-remove-btn" onclick="removeFile(${index})">×</span>
+                    </div>
+                `;
+            });
+            fileInfoDiv.innerHTML = html;
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
+        // Process files based on mode
+        async function processFiles() {
+            if (!selectedFiles || selectedFiles.length === 0) {
+                showMessage('Please select PDF files first', 'error');
+                return;
+            }
+
+            if (uploadMode === 'batch') {
+                await batchUpload();
+            } else {
+                await individualProcess();
+            }
+        }
+
+        // Batch upload to database
+        async function batchUpload() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('uploadResults').style.display = 'none';
+            document.getElementById('submitBtn').disabled = true;
+
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+
+            document.getElementById('progressInfo').textContent =
+                `Uploading ${selectedFiles.length} file(s) to database...`;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/upload-pdf-batch`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+
+                displayBatchResults(data);
+
+                // Refresh database view if visible
+                if (document.getElementById('statementsSection').style.display !== 'none') {
+                    await loadStatements(currentPage);
+                }
+                if (document.getElementById('summaryBox').style.display !== 'none') {
+                    await loadSummary();
+                }
+
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                showMessage(`Upload failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Individual processing (no DB storage)
+        async function individualProcess() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('uploadResults').style.display = 'none';
+            document.getElementById('submitBtn').disabled = true;
+
+            const allResults = [];
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                const formData = new FormData();
+                formData.append('file', file);
+
+                document.getElementById('progressInfo').textContent =
+                    `Processing file ${i + 1} of ${selectedFiles.length}: ${file.name}`;
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/upload-pdf`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    allResults.push({
+                        filename: file.name,
+                        ...data
+                    });
+
+                    if (data.success) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                    }
+
+                } catch (error) {
+                    allResults.push({
+                        filename: file.name,
+                        success: false,
+                        error: 'Network error',
+                        message: error.message
+                    });
+                    errorCount++;
+                }
+            }
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+
+            displayIndividualResults(allResults, successCount, errorCount);
+        }
+
+        // Display batch upload results
+        function displayBatchResults(data) {
+            const resultsDiv = document.getElementById('uploadResults');
+            resultsDiv.style.display = 'block';
+
+            const statusEl = document.getElementById('uploadStatus');
+            const contentEl = document.getElementById('uploadResultContent');
+
+            if (data.success) {
+                statusEl.textContent = 'Success';
+                statusEl.className = 'status success';
+
+                let html = `
+                    <div class="alert success">
+                        <strong>Batch Upload Complete!</strong><br>
+                        Successfully processed: ${data.processed} file(s)<br>
+                        Errors: ${data.errors}
+                    </div>
+                `;
+
+                if (data.error_details && data.error_details.length > 0) {
+                    html += '<div class="alert error"><strong>Errors:</strong><ul>';
+                    data.error_details.forEach(err => {
+                        html += `<li>${err}</li>`;
+                    });
+                    html += '</ul></div>';
+                }
+
+                contentEl.innerHTML = html;
+
+            } else {
+                statusEl.textContent = 'Error';
+                statusEl.className = 'status error';
+                contentEl.innerHTML = `
+                    <div class="alert error">
+                        <strong>Error:</strong> ${data.error || 'Unknown error'}<br>
+                        ${data.message || ''}
+                    </div>
+                `;
+            }
+        }
+
+        // Display individual processing results
+        function displayIndividualResults(results, successCount, errorCount) {
+            const resultsDiv = document.getElementById('uploadResults');
+            resultsDiv.style.display = 'block';
+
+            const statusEl = document.getElementById('uploadStatus');
+            const contentEl = document.getElementById('uploadResultContent');
+
+            if (successCount > 0 && errorCount === 0) {
+                statusEl.textContent = 'Success';
+                statusEl.className = 'status success';
+            } else if (successCount > 0 && errorCount > 0) {
+                statusEl.textContent = `Partial: ${successCount}/${results.length}`;
+                statusEl.className = 'status warning';
+            } else {
+                statusEl.textContent = 'Failed';
+                statusEl.className = 'status error';
+            }
+
+            let html = '<table class="multi-results-table"><thead><tr>';
+            html += '<th>File</th><th>Property</th><th>Date</th><th>Rent</th>';
+            html += '<th>Mgmt Fee</th><th>Repair</th><th>Deposit</th><th>Misc</th>';
+            html += '<th>Total</th><th>Confidence</th><th>Method</th>';
+            html += '</tr></thead><tbody>';
+
+            results.forEach(result => {
+                html += '<tr>';
+                html += `<td>${result.filename}</td>`;
+
+                if (result.success && result.data) {
+                    html += `<td>${result.data.property_id || ''}</td>`;
+                    html += `<td>${result.data.date || ''}</td>`;
+                    html += `<td>${formatCurrency(result.data.rent)}</td>`;
+                    html += `<td>${formatCurrency(result.data.management_fee)}</td>`;
+                    html += `<td>${formatCurrency(result.data.repair)}</td>`;
+                    html += `<td>${formatCurrency(result.data.deposit)}</td>`;
+                    html += `<td>${formatCurrency(result.data.misc)}</td>`;
+                    html += `<td>${formatCurrency(result.data.total)}</td>`;
+                    html += `<td>${(result.confidence * 100).toFixed(1)}%</td>`;
+                    html += `<td>${result.method || ''}</td>`;
+                } else {
+                    html += `<td colspan="10" style="color: red;">Error: ${result.error || 'Processing failed'}</td>`;
+                }
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            contentEl.innerHTML = html;
+        }
+
+        // Database management functions
+        async function loadSummary() {
+            try {
+                const response = await fetch(`${API_BASE}/api/parsed-statements/summary`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const summaryBox = document.getElementById('summaryBox');
+                    const summaryGrid = document.getElementById('summaryGrid');
+
+                    summaryBox.style.display = 'block';
+
+                    summaryGrid.innerHTML = `
+                        <div class="summary-item">
+                            <div class="summary-label">Total Records</div>
+                            <div class="summary-value">${data.summary.total_records}</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Properties</div>
+                            <div class="summary-value">${data.summary.total_properties}</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Total Rent</div>
+                            <div class="summary-value">$${data.summary.total_rent.toFixed(2)}</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Total Mgmt Fees</div>
+                            <div class="summary-value">$${data.summary.total_management_fees.toFixed(2)}</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Avg Confidence</div>
+                            <div class="summary-value">${data.summary.average_confidence.toFixed(1)}%</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Last Upload</div>
+                            <div class="summary-value">${data.summary.last_upload ?
+                                new Date(data.summary.last_upload).toLocaleDateString() : 'N/A'}</div>
+                        </div>
+                    `;
+
+                    showMessage('Summary loaded successfully', 'success');
+                } else {
+                    showMessage(`Failed to load summary: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`Error loading summary: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadStatements(page = 1) {
+            const propertyFilter = document.getElementById('propertyFilter').value;
+            let url = `${API_BASE}/api/parsed-statements?page=${page}&per_page=20`;
+
+            if (propertyFilter) {
+                url += `&property=${encodeURIComponent(propertyFilter)}`;
+            }
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('statementsSection').style.display = 'block';
+                    displayStatements(data.data);
+
+                    currentPage = data.page;
+                    totalPages = data.total_pages;
+                    updatePagination();
+
+                    showMessage(`Loaded ${data.data.length} statements`, 'info');
+                } else {
+                    showMessage(`Failed to load statements: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`Error loading statements: ${error.message}`, 'error');
+            }
+        }
+
+        function displayStatements(statements) {
+            const tbody = document.getElementById('statementsTableBody');
+            tbody.innerHTML = '';
+
+            statements.forEach(stmt => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = stmt.id;
+                row.insertCell(1).textContent = stmt.filename;
+                row.insertCell(2).textContent = stmt.property || '';
+                row.insertCell(3).textContent = stmt.date || '';
+                row.insertCell(4).textContent = formatCurrency(stmt.rent);
+                row.insertCell(5).textContent = formatCurrency(stmt.mgmt_fee);
+                row.insertCell(6).textContent = formatCurrency(stmt.repair);
+                row.insertCell(7).textContent = formatCurrency(stmt.deposit);
+                row.insertCell(8).textContent = formatCurrency(stmt.misc);
+                row.insertCell(9).textContent = formatCurrency(stmt.total);
+
+                // Note: confidence not stored in database, only in processing response
+                const confCell = row.insertCell(10);
+                confCell.textContent = '-';
+
+                // Note: processing method not stored in database
+                row.insertCell(11).textContent = '-';
+                row.insertCell(12).textContent = '-';
+            });
+        }
+
+        function updatePagination() {
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage <= 1;
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                loadStatements(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                loadStatements(currentPage + 1);
+            }
+        }
+
+        function applyFilter() {
+            loadStatements(1);
+        }
+
+        function clearFilter() {
+            document.getElementById('propertyFilter').value = '';
+            loadStatements(1);
+        }
+
+        async function exportData() {
+            try {
+                const response = await fetch(`${API_BASE}/api/parsed-statements?per_page=1000`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const blob = new Blob([JSON.stringify(data.data, null, 2)],
+                        { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `parsed_statements_${new Date().toISOString()}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showMessage('Data exported successfully', 'success');
+                } else {
+                    showMessage('Failed to export data', 'error');
+                }
+            } catch (error) {
+                showMessage(`Export error: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearDatabase() {
+            if (!confirm('Are you sure you want to clear all parsed statements from the database? This action cannot be undone.')) {
+                return;
+            }
+
+            // Note: This endpoint doesn't exist in the backend yet
+            // You would need to add a DELETE endpoint to clear the database
+            showMessage('Clear database functionality requires backend implementation', 'info');
+        }
+
+        // Utility functions
+        function formatCurrency(value) {
+            // Display 0.00 for zero values (0-defaults schema)
+            if (value === null || value === undefined) return '$0.00';
+            if (typeof value === 'number') return `$${value.toFixed(2)}`;
+            return value;
+        }
+
+        function showMessage(message, type = 'info') {
+            const messageArea = document.getElementById('messageArea');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${type}`;
+            alertDiv.textContent = message;
+            messageArea.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            updateEndpoint();
+        };
+    </script>
+</body>
+</html>
