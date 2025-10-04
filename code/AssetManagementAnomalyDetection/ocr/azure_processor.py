@@ -37,7 +37,7 @@ class AzureDocumentProcessor:
             credential=AzureKeyCredential(self.api_key)
         )
 
-    def process_pdf_bytes(self, pdf_bytes: bytes, model_id: str = "prebuilt-invoice") -> Tuple[Dict[str, Any], float]:
+    def process_pdf_bytes(self, pdf_bytes: bytes, model_id: str = "prebuilt-document") -> Tuple[Dict[str, Any], float]:
         """
         Process PDF bytes using Azure Document Intelligence.
 
@@ -110,16 +110,22 @@ class AzureDocumentProcessor:
                 # Debug logging - see what fields Azure detected
                 print(f"[DEBUG] Azure detected document fields: {list(doc.fields.keys()) if doc.fields else 'None'}")
 
-                # Map Azure fields to our schema (for invoice model compatibility)
+                # Map Azure fields to our schema (now using prebuilt-document model)
+                # Removed CustomerName/VendorName as they map to agent/landlord, not property
                 field_mappings = {
                     'InvoiceTotal': 'total',
                     'AmountDue': 'total',
                     'Total': 'total',
                     'InvoiceDate': 'date',
                     'Date': 'date',
-                    'CustomerName': 'property_id',
-                    'VendorName': 'property_id'
+                    # property_id will be extracted by regex fallback instead
                 }
+
+                # Known letting agents to filter out from property_id
+                KNOWN_AGENTS = [
+                    'TM Residential', 'Clyde Office', 'Letting', 'Property Management',
+                    'Residential Services', 'Estate Agent', 'Lettings', 'Realty'
+                ]
 
                 # Extract mapped fields
                 for azure_field, our_field in field_mappings.items():
@@ -134,6 +140,14 @@ class AzureDocumentProcessor:
                                 value = float(value)
                             else:
                                 value = str(value)
+
+                            # Filter out known agents from property_id
+                            if our_field == 'property_id' and isinstance(value, str):
+                                is_agent = any(agent.lower() in value.lower() for agent in KNOWN_AGENTS)
+                                if is_agent:
+                                    print(f"[DEBUG] Filtered out agent name from property_id: {value}")
+                                    continue  # Skip this mapping
+
                             extracted_data[our_field] = value
                             field_confidences[our_field] = field_value.confidence or 0.0
 
@@ -227,6 +241,36 @@ class AzureDocumentProcessor:
                         except ValueError:
                             continue  # Try next pattern
 
+            # Fallback: Try to extract property_id from raw text content
+            if extracted_data.get('property_id') is None and hasattr(result, 'content'):
+                print(f"[DEBUG] Trying regex fallback for property address")
+                text_content = result.content
+
+                # UK rental statement property patterns
+                property_patterns = [
+                    # Pattern 1: "Property: Flat 2, 1 Bedford Avenue, G81 2PL"
+                    r'Property:\s*([^,\n]+(?:,\s*[^,\n]+)*,\s*[A-Z]{1,2}\d{1,2}\s?\d?[A-Z]{2})',
+
+                    # Pattern 2: "Property Address: ..."
+                    r'Property\s+[Aa]ddress:\s*([^,\n]+(?:,\s*[^,\n]+)*,\s*[A-Z]{1,2}\d{1,2}\s?\d?[A-Z]{2})',
+
+                    # Pattern 3: Labeled line ending with UK postcode
+                    r'(?:Property|Address):\s*(.+?[A-Z]{1,2}\d{1,2}\s?\d?[A-Z]{2})',
+                ]
+
+                for pattern in property_patterns:
+                    match = re.search(pattern, text_content, re.IGNORECASE | re.MULTILINE)
+                    if match:
+                        # Clean up the extracted address
+                        property_address = match.group(1).strip()
+                        # Remove extra whitespace and newlines
+                        property_address = ' '.join(property_address.split())
+
+                        extracted_data['property_id'] = property_address
+                        field_confidences['property_id'] = 0.75  # Medium confidence for regex
+                        print(f"[DEBUG] Found property via regex: {property_address}")
+                        break  # Stop after first match
+
             # Calculate overall confidence
             if field_confidences:
                 avg_confidence = sum(field_confidences.values()) / len(field_confidences)
@@ -242,7 +286,7 @@ class AzureDocumentProcessor:
             logger.error(f"Azure Document Intelligence processing error: {e}")
             raise
 
-    def process_pdf_file(self, file_path: str, model_id: str = "prebuilt-invoice") -> Tuple[Dict[str, Any], float]:
+    def process_pdf_file(self, file_path: str, model_id: str = "prebuilt-document") -> Tuple[Dict[str, Any], float]:
         """
         Process a PDF file from disk.
 
