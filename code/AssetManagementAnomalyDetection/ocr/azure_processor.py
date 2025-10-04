@@ -271,6 +271,36 @@ class AzureDocumentProcessor:
                         print(f"[DEBUG] Found property via regex: {property_address}")
                         break  # Stop after first match
 
+            # Fallback: Try to extract date from raw text content
+            if extracted_data.get('date') is None and hasattr(result, 'content'):
+                print(f"[DEBUG] Trying regex fallback for statement date")
+                text_content = result.content
+
+                # UK rental statement date patterns
+                date_patterns = [
+                    # Pattern 1: "Statement as at 25/07/2023"
+                    r'Statement\s+as\s+at\s+(\d{1,2}/\d{1,2}/\d{4})',
+
+                    # Pattern 2: "Statement date: 25/07/2023"
+                    r'Statement\s+date:\s*(\d{1,2}/\d{1,2}/\d{4})',
+
+                    # Pattern 3: "25 July 2023" (day month year)
+                    r'(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})',
+
+                    # Pattern 4: Generic DD/MM/YYYY format near top of document
+                    r'^.*?(\d{1,2}/\d{1,2}/\d{4})',
+                ]
+
+                for pattern in date_patterns:
+                    match = re.search(pattern, text_content, re.IGNORECASE | re.MULTILINE)
+                    if match:
+                        statement_date = match.group(1).strip()
+
+                        extracted_data['date'] = statement_date
+                        field_confidences['date'] = 0.75  # Medium confidence for regex
+                        print(f"[DEBUG] Found statement date via regex: {statement_date}")
+                        break  # Stop after first match
+
             # Calculate overall confidence
             if field_confidences:
                 avg_confidence = sum(field_confidences.values()) / len(field_confidences)
