@@ -701,7 +701,6 @@
                 let html = `
                     <div class="alert success">
                         <strong>Batch Upload Complete!</strong><br>
-                        Batch ID: ${data.batch_id}<br>
                         Successfully processed: ${data.processed} file(s)<br>
                         Errors: ${data.errors}
                     </div>
@@ -759,8 +758,8 @@
                 html += `<td>${result.filename}</td>`;
 
                 if (result.success && result.data) {
-                    html += `<td>${result.data.property_id || '-'}</td>`;
-                    html += `<td>${result.data.date || '-'}</td>`;
+                    html += `<td>${result.data.property_id || ''}</td>`;
+                    html += `<td>${result.data.date || ''}</td>`;
                     html += `<td>${formatCurrency(result.data.rent)}</td>`;
                     html += `<td>${formatCurrency(result.data.management_fee)}</td>`;
                     html += `<td>${formatCurrency(result.data.repair)}</td>`;
@@ -768,7 +767,7 @@
                     html += `<td>${formatCurrency(result.data.misc)}</td>`;
                     html += `<td>${formatCurrency(result.data.total)}</td>`;
                     html += `<td>${(result.confidence * 100).toFixed(1)}%</td>`;
-                    html += `<td>${result.method || '-'}</td>`;
+                    html += `<td>${result.method || ''}</td>`;
                 } else {
                     html += `<td colspan="10" style="color: red;">Error: ${result.error || 'Processing failed'}</td>`;
                 }
@@ -833,7 +832,7 @@
             let url = `${API_BASE}/api/parsed-statements?page=${page}&per_page=20`;
 
             if (propertyFilter) {
-                url += `&property_id=${encodeURIComponent(propertyFilter)}`;
+                url += `&property=${encodeURIComponent(propertyFilter)}`;
             }
 
             try {
@@ -865,23 +864,22 @@
                 const row = tbody.insertRow();
                 row.insertCell(0).textContent = stmt.id;
                 row.insertCell(1).textContent = stmt.filename;
-                row.insertCell(2).textContent = stmt.property_id || '-';
-                row.insertCell(3).textContent = stmt.statement_date || '-';
+                row.insertCell(2).textContent = stmt.property || '';
+                row.insertCell(3).textContent = stmt.date || '';
                 row.insertCell(4).textContent = formatCurrency(stmt.rent);
-                row.insertCell(5).textContent = formatCurrency(stmt.management_fee);
+                row.insertCell(5).textContent = formatCurrency(stmt.mgmt_fee);
                 row.insertCell(6).textContent = formatCurrency(stmt.repair);
                 row.insertCell(7).textContent = formatCurrency(stmt.deposit);
                 row.insertCell(8).textContent = formatCurrency(stmt.misc);
                 row.insertCell(9).textContent = formatCurrency(stmt.total);
 
+                // Note: confidence not stored in database, only in processing response
                 const confCell = row.insertCell(10);
-                const conf = stmt.confidence || 0;
-                confCell.textContent = `${conf.toFixed(1)}%`;
-                confCell.style.color = conf > 80 ? '#28a745' : conf > 50 ? '#ffc107' : '#dc3545';
+                confCell.textContent = '-';
 
-                row.insertCell(11).textContent = stmt.processing_method || '-';
-                row.insertCell(12).textContent = stmt.uploaded_at ?
-                    new Date(stmt.uploaded_at).toLocaleString() : '-';
+                // Note: processing method not stored in database
+                row.insertCell(11).textContent = '-';
+                row.insertCell(12).textContent = '-';
             });
         }
 
@@ -947,7 +945,8 @@
 
         // Utility functions
         function formatCurrency(value) {
-            if (value === null || value === undefined) return '-';
+            // Display 0.00 for zero values (0-defaults schema)
+            if (value === null || value === undefined) return '$0.00';
             if (typeof value === 'number') return `$${value.toFixed(2)}`;
             return value;
         }
