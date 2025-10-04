@@ -247,9 +247,6 @@ def upload_pdf_batch():
                 'message': 'Please select at least one PDF file to upload'
             }), 400
 
-        # Generate batch identifier
-        batch_id = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
-
         # Import OCR processor
         from ocr.azure_processor import get_ocr_processor
         processor = get_ocr_processor()
@@ -275,18 +272,14 @@ def upload_pdf_batch():
                 # Create ParsedStatement record
                 statement = ParsedStatement(
                     filename=file.filename,
-                    upload_batch=batch_id,
-                    property_id=extracted_data.get('property_id'),
-                    statement_date=extracted_data.get('date'),
+                    property=extracted_data.get('property_id'),
+                    date=extracted_data.get('date'),
                     rent=extracted_data.get('rent'),
-                    management_fee=extracted_data.get('management_fee'),
+                    mgmt_fee=extracted_data.get('management_fee'),
                     repair=extracted_data.get('repair'),
                     deposit=extracted_data.get('deposit'),
                     misc=extracted_data.get('misc'),
-                    total=extracted_data.get('total'),
-                    confidence=confidence,
-                    processing_method='azure' if 'Azure' in processor.__class__.__name__ else 'local',
-                    field_confidences=json.dumps(extracted_data.get('field_confidences', {}))
+                    total=extracted_data.get('total')
                 )
 
                 parsed_records.append(statement)
@@ -310,7 +303,7 @@ def upload_pdf_batch():
                 # Commit transaction
                 db.session.commit()
 
-                print(f"Stored {len(parsed_records)} parsed statements in batch {batch_id}")
+                print(f"Stored {len(parsed_records)} parsed statements in database")
 
             except Exception as e:
                 db.session.rollback()
@@ -322,7 +315,6 @@ def upload_pdf_batch():
 
         return jsonify({
             'success': True,
-            'batch_id': batch_id,
             'processed': success_count,
             'errors': error_count,
             'error_details': errors,
@@ -347,17 +339,17 @@ def get_parsed_statements():
         # Get query parameters
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 50, type=int)
-        property_id = request.args.get('property_id', None)
+        property_filter = request.args.get('property', None)
 
         # Build query
         query = ParsedStatement.query
 
         # Apply filter if provided
-        if property_id:
-            query = query.filter_by(property_id=property_id)
+        if property_filter:
+            query = query.filter_by(property=property_filter)
 
-        # Order by upload time (most recent first)
-        query = query.order_by(ParsedStatement.uploaded_at.desc())
+        # Order by ID (most recent first)
+        query = query.order_by(ParsedStatement.id.desc())
 
         # Paginate results
         paginated = query.paginate(page=page, per_page=per_page, error_out=False)
@@ -368,18 +360,14 @@ def get_parsed_statements():
             statements.append({
                 'id': stmt.id,
                 'filename': stmt.filename,
-                'upload_batch': stmt.upload_batch,
-                'property_id': stmt.property_id,
-                'statement_date': stmt.statement_date,
+                'property': stmt.property,
+                'date': stmt.date,
                 'rent': stmt.rent,
-                'management_fee': stmt.management_fee,
+                'mgmt_fee': stmt.mgmt_fee,
                 'repair': stmt.repair,
                 'deposit': stmt.deposit,
                 'misc': stmt.misc,
-                'total': stmt.total,
-                'confidence': stmt.confidence,
-                'processing_method': stmt.processing_method,
-                'uploaded_at': stmt.uploaded_at.isoformat() if stmt.uploaded_at else None
+                'total': stmt.total
             })
 
         return jsonify({
@@ -415,9 +403,7 @@ def get_parsed_statements_summary():
                     'total_records': 0,
                     'total_properties': 0,
                     'total_rent': 0,
-                    'total_fees': 0,
-                    'average_confidence': 0,
-                    'last_upload': None
+                    'total_mgmt_fees': 0
                 }
             }), 200
 
@@ -425,19 +411,12 @@ def get_parsed_statements_summary():
         properties = set()
         total_rent = 0
         total_fees = 0
-        total_confidence = 0
-        last_upload = None
 
         for stmt in statements:
-            if stmt.property_id:
-                properties.add(stmt.property_id)
+            if stmt.property:
+                properties.add(stmt.property)
             total_rent += stmt.rent or 0
-            total_fees += stmt.management_fee or 0
-            total_confidence += stmt.confidence or 0
-            if not last_upload or stmt.uploaded_at > last_upload:
-                last_upload = stmt.uploaded_at
-
-        avg_confidence = total_confidence / len(statements) if statements else 0
+            total_fees += stmt.mgmt_fee or 0
 
         return jsonify({
             'success': True,
@@ -445,10 +424,7 @@ def get_parsed_statements_summary():
                 'total_records': len(statements),
                 'total_properties': len(properties),
                 'total_rent': round(total_rent, 2),
-                'total_management_fees': round(total_fees, 2),
-                'average_confidence': round(avg_confidence, 2),
-                'last_upload': last_upload.isoformat() if last_upload else None,
-                'current_batch': statements[0].upload_batch if statements else None
+                'total_mgmt_fees': round(total_fees, 2)
             }
         }), 200
 
