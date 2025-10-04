@@ -54,16 +54,17 @@ class ParsedStatement(db.Model):
     """
     Store parsed rental statement data from PDF uploads.
     Simplified schema with only essential fields.
+    All numeric fields default to 0 instead of NULL per requirements.
     """
     __tablename__ = 'parsed_statements'
 
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(255), nullable=False)
-    property = db.Column(db.String(255), nullable=True)
-    date = db.Column(db.String(50), nullable=True)
-    rent = db.Column(db.Float, nullable=True)
-    mgmt_fee = db.Column(db.Float, nullable=True)
-    repair = db.Column(db.Float, nullable=True)
-    deposit = db.Column(db.Float, nullable=True)
-    misc = db.Column(db.Float, nullable=True)
-    total = db.Column(db.Float, nullable=True)
+    property = db.Column(db.String(255), nullable=False, default='')
+    date = db.Column(db.String(50), nullable=False, default='')
+    rent = db.Column(db.Float, nullable=False, default=0.0)
+    mgmt_fee = db.Column(db.Float, nullable=False, default=0.0)
+    repair = db.Column(db.Float, nullable=False, default=0.0)
+    deposit = db.Column(db.Float, nullable=False, default=0.0)
+    misc = db.Column(db.Float, nullable=False, default=0.0)
+    total = db.Column(db.Float, nullable=False, default=0.0)

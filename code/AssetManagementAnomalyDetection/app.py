@@ -214,7 +214,6 @@ def upload_pdf():
         print(f"Error type: {type(e).__name__}")
         print(f"Full traceback:\n{error_details}")
         print(f"================================")
-        logger.error(f"PDF processing error: {e}", exc_info=True)
         return jsonify({
             'success': False,
             'error': 'Processing failed',

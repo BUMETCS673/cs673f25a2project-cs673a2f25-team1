@@ -57,15 +57,16 @@ class AzureDocumentProcessor:
             result = poller.result()
 
             # Extract fields from rental statements
+            # Initialize all numeric fields to 0 (not None) per schema requirements
             extracted_data = {
-                'rent': None,
-                'management_fee': None,
-                'repair': None,
-                'deposit': None,
-                'misc': None,
-                'total': None,
-                'date': None,
-                'property_id': None
+                'rent': 0.0,
+                'management_fee': 0.0,
+                'repair': 0.0,
+                'deposit': 0.0,
+                'misc': 0.0,
+                'total': 0.0,
+                'date': '',
+                'property_id': ''
             }
 
             field_confidences = {}
@@ -192,7 +193,7 @@ class AzureDocumentProcessor:
                     print("[DEBUG] No line items found in document")
 
             # Fallback: Try to extract management fee from the raw text content
-            if extracted_data.get('management_fee') is None and hasattr(result, 'content'):
+            if extracted_data.get('management_fee') == 0.0 and hasattr(result, 'content'):
                 print(f"[DEBUG] Trying regex fallback on document text")
                 text_content = result.content
 
@@ -218,7 +219,7 @@ class AzureDocumentProcessor:
                                 pass
 
             # Fallback: Try to extract rent from raw text content
-            if extracted_data.get('rent') is None and hasattr(result, 'content'):
+            if extracted_data.get('rent') == 0.0 and hasattr(result, 'content'):
                 print(f"[DEBUG] Trying regex fallback for rent")
                 text_content = result.content
 
@@ -242,7 +243,7 @@ class AzureDocumentProcessor:
                             continue  # Try next pattern
 
             # Fallback: Try to extract property_id from raw text content
-            if extracted_data.get('property_id') is None and hasattr(result, 'content'):
+            if not extracted_data.get('property_id') and hasattr(result, 'content'):
                 print(f"[DEBUG] Trying regex fallback for property address")
                 text_content = result.content
 
@@ -272,7 +273,7 @@ class AzureDocumentProcessor:
                         break  # Stop after first match
 
             # Fallback: Try to extract date from raw text content
-            if extracted_data.get('date') is None and hasattr(result, 'content'):
+            if not extracted_data.get('date') and hasattr(result, 'content'):
                 print(f"[DEBUG] Trying regex fallback for statement date")
                 text_content = result.content
 
@@ -300,6 +301,36 @@ class AzureDocumentProcessor:
                         field_confidences['date'] = 0.75  # Medium confidence for regex
                         print(f"[DEBUG] Found statement date via regex: {statement_date}")
                         break  # Stop after first match
+
+            # Fallback: Try to extract total from raw text content
+            if extracted_data.get('total') == 0.0 and hasattr(result, 'content'):
+                print(f"[DEBUG] Trying regex fallback for total amount")
+                text_content = result.content
+
+                # Rental statement total patterns (net amount after deductions)
+                # Note: Must avoid matching "TOTAL INCOME" or "TOTAL EXPENDITURE"
+                total_patterns = [
+                    # Pattern 1: "TOTAL" followed directly by amount (not INCOME/EXPENDITURE)
+                    r'^TOTAL\s+(\d+[\d,]*\.?\d*)\s*$',
+
+                    # Pattern 2: "Total Balance" or "Balance Due"
+                    r'(?:Total\s+Balance|Balance\s+Due)\s*[^\d]*(\d+[\d,]*\.?\d*)',
+
+                    # Pattern 3: "Net Total" or "Net Amount"
+                    r'(?:Net\s+Total|Net\s+Amount)\s*[^\d]*(\d+[\d,]*\.?\d*)',
+                ]
+
+                for pattern in total_patterns:
+                    match = re.search(pattern, text_content, re.IGNORECASE | re.MULTILINE)
+                    if match:
+                        try:
+                            total_amount = float(match.group(1).replace(',', ''))
+                            extracted_data['total'] = total_amount
+                            field_confidences['total'] = 0.75  # Medium confidence for regex
+                            print(f"[DEBUG] Found total via regex: {total_amount}")
+                            break  # Stop after first match
+                        except ValueError:
+                            continue  # Try next pattern
 
             # Calculate overall confidence
             if field_confidences:
@@ -371,15 +402,16 @@ class LocalOCRProcessor:
         import tempfile
         import re
 
+        # Initialize all numeric fields to 0 (not None) per schema requirements
         extracted_data = {
-            'rent': None,
-            'management_fee': None,
-            'repair': None,
-            'deposit': None,
-            'misc': None,
-            'total': None,
-            'date': None,
-            'property_id': None,
+            'rent': 0.0,
+            'management_fee': 0.0,
+            'repair': 0.0,
+            'deposit': 0.0,
+            'misc': 0.0,
+            'total': 0.0,
+            'date': '',
+            'property_id': '',
             'field_confidences': {}
         }
 
